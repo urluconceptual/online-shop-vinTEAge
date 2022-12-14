@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@700&family=Unbounded&display=swap');
+
+.font-cormorant {
+    font-family: 'Cormorant Infant', serif;
+}
+
+.font-logo {
+    font-family: 'Unbounded', cursive;
+}
+
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}

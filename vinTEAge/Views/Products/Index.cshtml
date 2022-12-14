@@ -1,0 +1,16 @@
+﻿@foreach (var product in ViewBag.Products) {
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <img src="@product.Photo" class="card-img-top" alt="@product.Title">
+
+            <h3 class="card-title">@product.Title</h3>
+
+            <h5 class="card-subtitle mb-2 text-muted">@product.Category.CategoryName</h5>
+
+            <p class="card-text">@product.Price</p>
+
+            <a href="/Products/Show/@product.ProductId" class="card-link">Vizualizare produs</a>
+
+        </div>
+    </div>
+}
