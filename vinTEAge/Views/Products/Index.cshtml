@@ -1,16 +1,25 @@
-﻿@foreach (var product in ViewBag.Products) {
-    <div class="card" style="width: 18rem;">
+﻿<h2>Produsele noastre!</h2>
+
+<hr>
+
+<div class="d-flex align-content-center justify-content-center flex-wrap">
+@foreach (var product in ViewBag.Products) {
+    <div class="card m-3" style="width: 25rem;">
         <div class="card-body">
             <img src="@product.Photo" class="card-img-top" alt="@product.Title">
 
-            <h3 class="card-title">@product.Title</h3>
+                <div class="d-flex flex-row justify-content-between align-items-center">
+            <h3 class="card-title p-2">@product.Title</h3>
+            <div class="card-text p-2"><i class="bi bi-tag"></i> @product.Price lei</div>
+            </div>
 
             <h5 class="card-subtitle mb-2 text-muted">@product.Category.CategoryName</h5>
 
-            <p class="card-text">@product.Price</p>
+            <div class="card-text"><i class="bi bi-star-half"></i> @product.Rating/10</div>
 
-            <a href="/Products/Show/@product.ProductId" class="card-link">Vizualizare produs</a>
+            <a href="/Products/Show/@product.ProductId" class="btn btn-outline-secondary">Vizualizare produs</a>
 
         </div>
     </div>
 }
+</div>
