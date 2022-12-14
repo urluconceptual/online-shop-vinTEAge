@@ -9,7 +9,7 @@ namespace vinTEAge.Controllers
     {
         private readonly ApplicationDbContext db;
 
-        public ProductsController (ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context)
         {
             db = context;
         }
@@ -38,5 +38,35 @@ namespace vinTEAge.Controllers
             return View();
         }
 
+        //afisarea formularului in care se vor completa datele unui produs, impreuna cu categoria din care face parte:
+        //HttpGet implicit
+        public IActionResult New()
+        {
+            var categories = from category in db.Categories
+                             select category;
+
+            ViewBag.Categories = categories;
+
+            return View();
+        }
+
+        //adaugarea atributului in baza de date:
+        [HttpPost]
+
+        public IActionResult New(Product product)
+        {
+            try
+            {
+                db.Products.Add(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("New");
+            }
+
+            return View();
+        }
     }
 }

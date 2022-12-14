@@ -1,16 +1,33 @@
-﻿
-    <div class="card">
-        <div class="card-body">
+﻿<div class="card">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
             <img src="@ViewBag.Product.Photo" class="card-img-top" alt="@ViewBag.Product.Title">
-
+        </li>
+        <li class="list-group-item">
             <div class="d-flex flex-row justify-content-between align-items-center">
                 <h3 class="card-title p-2">@ViewBag.Product.Title</h3>
                 <div class="card-text p-2"><i class="bi bi-tag"></i> @ViewBag.Product.Price lei</div>
             </div>
-
+        </li>
+        <li class="list-group-item">
             <h5 class="card-subtitle mb-2 text-muted">@ViewBag.Category.CategoryName</h5>
+        </li>
 
+        <li class="list-group-item">
             <div class="card-text"><i class="bi bi-star-half"></i> @ViewBag.Product.Rating/10</div>
+        </li>
 
-        </div>
-    </div>
+        <li class="list-group-item">
+            <div class="card-text">@ViewBag.Product.Description</div>
+        </li>
+
+        <li class="list-group-item">
+            <div class="d-flex flex-row align-content-center justify-content-between">
+            <a class="btn btn-outline-secondary" href="/Products/Edit/@ViewBag.Product.ProductId">Editeaza produs</a>
+            <form method="post" action="/Articles/Delete/@ViewBag.Product.ProductId">
+                <button class="btn btn-outline-secondary" type="submit">Sterge produs</button>
+            </form>
+            </div>
+        </li>
+    </ul>
+</div>
