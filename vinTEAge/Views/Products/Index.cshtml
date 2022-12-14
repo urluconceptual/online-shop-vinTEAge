@@ -1,8 +1,10 @@
-﻿<h2>Produsele noastre!</h2>
+﻿<div class="">
+<h2>Produsele noastre!</h2>
 
 <hr>
 
-<div class="d-flex align-content-center justify-content-center flex-wrap">
+<div class="d-flex align-content-center justify-content-center">
+<div class="d-flex align-content-center justify-content-start flex-wrap">
 @foreach (var product in ViewBag.Products) {
     <div class="card m-3" style="width: 25rem;">
         <div class="card-body">
@@ -22,4 +24,6 @@
         </div>
     </div>
 }
+</div>
+</div>
 </div>
