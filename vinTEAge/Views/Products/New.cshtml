@@ -1,26 +1,37 @@
-﻿
-<h2>Produs nou!</h2>
+﻿<h2>Produs nou!</h2>
 </br>
 
-<form method="post" action="Products/New">
+<form method="post" action="/Products/New">
     <label>Nume produs: </label>
     <input type="text" name="Title"/>
     </br>
+    </br>
 
-    <label>Descriere produs: </label>
+    <label>Descriere: </label>
     <input type="text" name="Description" />
     </br>
     </br>
 
-    <input type="hidden" name="Date" value="@DateTime.Now" />
+    <label>Poza: </label>
+    <input type="text" name="Photo" />
+    </br>
     </br>
 
     <label>Selectati categoria</label>
-    <select name="CategoryId"></select>
+    <select name="CategoryId">
         @foreach (var category in ViewBag.Categories) {
             <option value="category.CategoryId">@category.CategoryName</option>
         }
+    </select>
     </br>
+    </br>
+
+    <label>Pret: </label>
+    <input type="number" step="any" name="Price" />
+    </br>
+    </br>
+
+    <input type="hidden" name="Rating" value=""/>
 
     <button class="btn btn-outline-secondary" type="submit">Adauga produs</button>
 </form>

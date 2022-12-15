@@ -65,8 +65,6 @@ namespace vinTEAge.Controllers
             {
                 return RedirectToAction("New");
             }
-
-            return View();
         }
     }
 }

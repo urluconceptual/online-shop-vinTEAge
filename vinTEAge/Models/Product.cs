@@ -23,7 +23,7 @@ namespace vinTEAge.Models
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
 
-        public float Rating { get; set; }
+        public float? Rating { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
     }
