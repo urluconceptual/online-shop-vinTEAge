@@ -75,7 +75,7 @@ namespace vinTEAge.Controllers
         {
             Product product = db.Products.Include("Category").Where(prod => prod.ProductId == id).First();
 
-            ViewBag.Article = product;
+            ViewBag.Product = product;
             ViewBag.Category = product.Category;
 
             var categories = from category in db.Categories
@@ -86,6 +86,31 @@ namespace vinTEAge.Controllers
             return View();
         }
 
+        //se adauga articolul modificat in baza de date
+        [HttpPost]
+        public IActionResult Edit(int id, Product requestProduct)
+        {
+            Product product = db.Products.Find(id);
+
+            try
+            {
+                {
+                    product.Title = requestProduct.Title;
+                    product.Description = requestProduct.Description;
+                    product.Photo = requestProduct.Photo;
+                    product.CategoryId = requestProduct.CategoryId;
+                    product.Price = requestProduct.Price;
+                    db.SaveChanges();
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception)
+            {
+                return RedirectToAction("Edit", id);
+            }
+        }
 
     }
 }
