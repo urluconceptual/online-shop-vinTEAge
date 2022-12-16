@@ -66,5 +66,26 @@ namespace vinTEAge.Controllers
                 return RedirectToAction("New");
             }
         }
+
+        // se editeaza un produs existent in baza de date impreuna cu categoria din care face parte
+        // categoria se selecteaza dintr-un dropdown
+        // HttpGet implicit
+        // se afiseaza formularul impreuna cu datele aferente articolului din baza de date
+        public IActionResult Edit(int id)
+        {
+            Product product = db.Products.Include("Category").Where(prod => prod.ProductId == id).First();
+
+            ViewBag.Article = product;
+            ViewBag.Category = product.Category;
+
+            var categories = from category in db.Categories
+                             select category;
+
+            ViewBag.Categories = categories;
+
+            return View();
+        }
+
+
     }
 }

@@ -20,7 +20,7 @@
     <label>Selectati categoria</label>
     <select name="CategoryId">
         @foreach (var category in ViewBag.Categories) {
-            <option value="category.CategoryId">@category.CategoryName</option>
+            <option value="@category.CategoryId">@category.CategoryName</option>
         }
     </select>
     </br>
