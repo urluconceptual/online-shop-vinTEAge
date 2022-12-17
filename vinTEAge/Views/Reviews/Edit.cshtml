@@ -1,0 +1,18 @@
+﻿<h2>Modificarea review-ului @ViewBag.Review.ReviewId</h2>
+</br>
+
+<form method="post" action="/Reviews/Edit/@ViewBag.Review.ReviewId">
+    <label>Adauga un review: </label></br>
+    <textarea type="text" name="Text"></textarea>
+    </br>
+    </br>
+
+    <label>Adauga un rating: </label></br>
+    <input type="number" min="1" max="10" name="Rating" />
+    </br>
+    </br>
+
+    <input type="hidden" name="Date" value="@DateTime.Now" />
+
+    <button class="btn btn-outline-secondary" type="submit">Posteaza review-ul!</button>
+</form>
