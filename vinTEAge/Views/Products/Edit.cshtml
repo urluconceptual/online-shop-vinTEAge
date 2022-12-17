@@ -1,43 +1,33 @@
-﻿<h2>Modificare "@ViewBag.Product.ProductId. @ViewBag.Product.Title"</h2>
+﻿@model vinTEAge.Models.Product
+
+<h2>Modificare "@Model.ProductId. @Model.Title"</h2>
 </br>
 
-<form method="post" action="/Products/Edit/@ViewBag.Product.ProductId">
-    <label>Nume produs: </label><br />
-    <input type="text" name="Title" value="@ViewBag.Product.Title" />
-    </br>
-    </br>
+<form method="post" action="/Products/Edit/@Model.ProductId">
+    @Html.Label("Title", "Nume produs")
+    <br />
+    @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" }, value = Model.Title })
+    <br /><br />
 
-    <label>Descriere: </label><br />
-    <textarea type="text" name="Description">@ViewBag.Product.Description</textarea>
-    </br>
-    </br>
+    @Html.Label("Description", "Descriere produs")
+    <br />
+    @Html.Editor("Description", new { htmlAttributes = new { @class = "form-control" }, value = Model.Description })
+    <br /><br />
 
-    <label>Poza: </label><br />
-    <input type="text" name="Photo" value="@ViewBag.Product.Photo" />
-    </br>
-    </br>
+    @Html.Label("Photo", "Poza")
+    <br />
+    @Html.EditorFor(m => m.Photo, new { htmlAttributes = new { @class = "form-control" }, value = Model.Photo })
+    <br /><br />
 
-    <label>Selectati categoria</label><br />
-    <select name="CategoryId">
-        @foreach (var category in ViewBag.Categories)
-        {
-            if (category.CategoryId == ViewBag.Category.CategoryId) {
-                <option selected="selected" value="@category.CategoryId">@category.CategoryName</option>
-            }
-            else {
-                <option value="@category.CategoryId">@category.CategoryName</option>
-            }
-        }
-    </select>
-    </br>
-    </br>
+    @Html.HiddenFor(m => m.Rating)
 
-    <label>Pret: </label><br />
-    <input type="number" step="any" name="Price" value="@ViewBag.Product.Price" />
-    </br>
-    </br>
+    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categ, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
+    <br />
 
-    <input type="hidden" name="Rating" value="" />
+    @Html.Label("Price", "Pret")
+    <br />
+    @Html.EditorFor(m => m.Price, new { @class = "form-control", type="numeric", min="1", value= Model.Price })
+    <br /><br />
 
     <button class="btn btn-outline-secondary" type="submit">Modifica produs</button>
 </form>

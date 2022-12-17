@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace vinTEAge.Models
 {
@@ -26,5 +28,8 @@ namespace vinTEAge.Models
         public float? Rating { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SelectListItem> Categ { get; set; }
     }
 }

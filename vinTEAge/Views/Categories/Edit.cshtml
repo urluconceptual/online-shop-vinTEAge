@@ -1,11 +1,15 @@
-﻿<h2>Editare categorie</h2>
+﻿@model vinTEAge.Models.Category
 
-<form method="post" action="/Categories/Edit/@ViewBag.Category.CategoryId">
+<h2>Editare categorie</h2>
 
-    <label>Nume categorie</label>
-    <br /> <input type="text" name="CategoryName" value="@ViewBag.Category.CategoryName" />
+<form method="post" action="/Categories/Edit/@Model.CategoryId">
+
+    @Html.Label("CategoryName", "Denumire categorie")
+    <br />
+    @Html.Editor("CategoryName", new { htmlAttributes = new { @class = "form-control" }, value = Model.CategoryName })
     <br /><br />
 
     <button class="btn btn-outline-secondary" type="submit">Modifica categoria</button>
+
 </form>
 
