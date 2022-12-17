@@ -14,6 +14,11 @@ namespace vinTEAge.Controllers
         }
         public ActionResult Index()
         {
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
             var categories = from category in db.Categories
                              orderby category.CategoryName
                              select category;
@@ -24,8 +29,7 @@ namespace vinTEAge.Controllers
         public ActionResult Show(int id)
         {
             Category category = db.Categories.Find(id);
-            ViewBag.Category = category;
-            return View();
+            return View(category);
         }
 
         public ActionResult New()
@@ -40,39 +44,37 @@ namespace vinTEAge.Controllers
             {
                 db.Categories.Add(cat);
                 db.SaveChanges();
+                TempData["message"] = "Categoria a fost adaugata!";
                 return RedirectToAction("Index");
             }
+
             catch (Exception e)
             {
-                return View();
+                return View(cat);
             }
         }
 
         public ActionResult Edit(int id)
         {
             Category category = db.Categories.Find(id);
-            ViewBag.Category = category;
-            return View();
+            return View(category);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, Category requestCategory)
         {
+            Category category = db.Categories.Find(id);
             try
             {
-                Category category = db.Categories.Find(id);
 
-                {
-                    category.CategoryName = requestCategory.CategoryName;
-                    db.SaveChanges();
-                }
-
+                category.CategoryName = requestCategory.CategoryName;
+                db.SaveChanges();
+                TempData["message"] = "Categoria a fost modificata!";
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                ViewBag.Category = requestCategory;
-                return View();
+                return View(requestCategory);
             }
         }
 
@@ -81,6 +83,7 @@ namespace vinTEAge.Controllers
         {
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
+            TempData["message"] = "Categoria a fost stearsa!";
             db.SaveChanges();
             return RedirectToAction("Index");
         }

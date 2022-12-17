@@ -1,8 +1,10 @@
-﻿<h2>Afisare categorie</h2>
+﻿@model vinTEAge.Models.Category
 
-<p>@ViewBag.Category.CategoryName</p>
+<h2>Afisare categorie</h2>
 
-<form method="post" action="/Categories/Delete/@ViewBag.Category.CategoryId">
+<p>@Model.CategoryName</p>
+
+<form method="post" action="/Categories/Delete/@Model.CategoryId">
 
     <button class="btn btn-outline-secondary" type="submit">Sterge categoria</button>
 
