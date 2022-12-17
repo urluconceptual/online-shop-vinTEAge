@@ -38,33 +38,49 @@
 
 
 
-@*Afisare comentarii produs*@
-@try
+@*Afisare review-uri produs*@
+
+@{ bool viewBagEmpty = true; }
+@foreach (var review in ViewBag.Reviews)
 {
-    @foreach (var review in ViewBag.Product.Reviews)
-    {
-        <div class="card text-center">
-            <div class="card-header">Urilizaor @review.ReviewUserId</div>
-            <div class="card-body">
-                <h5><i class="bi bi-star-half"></i> @review.Rating/10</h5>
-                <p class="card-text">@review.Text</p>
-            </div>
-            <div class="card-footer text-muted">
-                @review.Date
-            </div>
+    viewBagEmpty = false;
+    <div class="card text-center">
+        <div class="card-header">@*Utilizator @review.UserId*@</div>
+
+        <div class="card-body">
+            <h5><i class="bi bi-star-half"></i> @review.Rating/10</h5>
+            <p class="card-text">@review.Text</p>
         </div>
-    }
+
+        <div class="card-footer text-muted">
+            @review.Date
+        </div>
+    </div>
 }
-catch (NullReferenceException ex)
+
+
+@*Daca nu exista review-uri*@
+
+@if (viewBagEmpty)
 {
-     <div class="card text-center">
-            <div class="card-header"></div>
-            <div class="card-body">
-                Acest produs nu are review-uri.
-            </div>
-            <div class="card-footer text-muted"></div>
+    <div class="card text-center">
+        <div class="card-header"></div>
+        <div class="card-body">
+            Acest produs nu are review-uri.
         </div>
+        <div class="card-footer text-muted"></div>
+    </div>
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
