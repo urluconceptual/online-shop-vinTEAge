@@ -14,7 +14,6 @@ namespace vinTEAge.Models
         [Required(ErrorMessage = "Continutul este obligatoriu!")]
         public int Rating { get; set; }
 
-        public int? ReviewUserId { get; set; }
         public virtual IdentityUser User { get; set; }
 
         public int ProductId { get; set; }
