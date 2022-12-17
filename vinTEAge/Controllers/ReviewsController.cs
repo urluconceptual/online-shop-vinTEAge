@@ -33,6 +33,7 @@ namespace vinTEAge.Controllers
             Product product = db.Products.Find(id);
 
             review.Date = DateTime.Now;
+            review.ProductId = id; 
 
             try
             {
