@@ -74,7 +74,7 @@ namespace vinTEAge.Controllers
 
                 return Redirect("/Products/Show/" + review.ProductId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return RedirectToAction("Edit", id); 
             }

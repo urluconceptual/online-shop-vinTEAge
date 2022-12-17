@@ -2,22 +2,22 @@
 </br>
 
 <form method="post" action="/Products/New">
-    <label>Nume produs: </label>
+    <label>Nume produs: </label><br />
     <input type="text" name="Title"/>
     </br>
     </br>
 
-    <label>Descriere: </label>
+    <label>Descriere: </label><br />
     <textarea type="text" name="Description"></textarea>
     </br>
     </br>
 
-    <label>Poza: </label>
+    <label>Poza: </label><br />
     <input type="text" name="Photo" />
     </br>
     </br>
 
-    <label>Selectati categoria</label>
+    <label>Selectati categoria</label><br />
     <select name="CategoryId">
         @foreach (var category in ViewBag.Categories) {
             <option value="@category.CategoryId">@category.CategoryName</option>
@@ -26,7 +26,7 @@
     </br>
     </br>
 
-    <label>Pret: </label>
+    <label>Pret: </label><br />
     <input type="number" step="any" name="Price" />
     </br>
     </br>

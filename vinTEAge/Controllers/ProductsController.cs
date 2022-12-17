@@ -75,7 +75,7 @@ namespace vinTEAge.Controllers
         // se afiseaza formularul impreuna cu datele aferente articolului din baza de date
         public IActionResult Edit(int id)
         {
-            Product product = db.Products.Include("Category").Include("Review").Where(prod => prod.ProductId == id).First();
+            Product product = db.Products.Include("Category").Where(prod => prod.ProductId == id).First();
 
             ViewBag.Product = product;
             ViewBag.Category = product.Category;
@@ -114,5 +114,14 @@ namespace vinTEAge.Controllers
             }
         }
 
+        // se sterge un produs din baza de date 
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            Product product = db.Products.Find(id);
+            db.Products.Remove(product);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
