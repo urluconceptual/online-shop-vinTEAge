@@ -16,7 +16,7 @@ namespace vinTEAge.Controllers
 
         //adaugarea unui review asociat unui produs din baza de date 
         // HttpGet implicit
-        // se afiseaza formularul impreuna cu datele aferente produsului din baza de date
+        // se afiseaza formularul in care se va intorduce review-ul impreuna cu ratingul
         public IActionResult New(int id)
         {
             Product product = db.Products.Include("Reviews").Where(prod => prod.ProductId == id).First();
@@ -28,6 +28,8 @@ namespace vinTEAge.Controllers
             return View(); 
         }
 
+
+        //adaugarea review-ului in baza de date:
         [HttpPost]
         public IActionResult New(int id, Review review)
         {
@@ -45,6 +47,48 @@ namespace vinTEAge.Controllers
                 return RedirectToAction("New", id); 
             }
         }
-       
+
+        //modificarea unui review asociat unui produs din baza de date 
+        // HttpGet implicit
+        // se afiseaza formularul in care se va intorduce review-ul impreuna cu ratingul
+        public IActionResult Edit(int id)
+        {
+            Review review = db.Reviews.Find(id);
+            ViewBag.Review = review;  
+
+            return View(); 
+        }
+
+        //adaugarea review-ului in baza de date:
+        [HttpPost]
+        public IActionResult Edit(int id, Review requestReview)
+        {
+            Review review = db.Reviews.Find(id); 
+
+            try
+            {
+                review.Text = requestReview.Text;
+                review.Rating = requestReview.Rating;
+                review.Date = requestReview.Date; 
+                db.SaveChanges();
+
+                return Redirect("/Products/Show/" + review.ProductId);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Edit", id); 
+            }
+        }
+
+        //stergerea unui review asociat unui produs din baza de date
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            Review review = db.Reviews.Find(id);
+            db.Reviews.Remove(review);
+            db.SaveChanges();
+            return Redirect("/Products/Show/" + review.ProductId);
+        }
+
     }
 }

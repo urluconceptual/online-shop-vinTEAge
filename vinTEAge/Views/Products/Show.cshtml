@@ -37,6 +37,9 @@
 </div>
 
 
+</br>
+</br>
+
 
 @*Afisare review-uri produs*@
 
@@ -53,7 +56,20 @@
         </div>
 
         <div class="card-footer text-muted">
-            @review.Date
+            <div class="d-flex d-flex justify-content-between align-items-center">
+               
+               <div>
+                    <a class="btn btn-outline-secondary" href="/Reviews/Edit/@review.ReviewId"><i class="bi bi-pencil-square"></i>Editeaza</a>
+               </div>
+
+               <div>@review.Date</div>
+
+               <div>
+                    <form method="post" action="/Reviews/Delete/@review.ReviewId">
+                        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+                    </form>
+               </div>
+           </div>
         </div>
     </div>
 }
