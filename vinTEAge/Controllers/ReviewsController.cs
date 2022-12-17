@@ -31,13 +31,11 @@ namespace vinTEAge.Controllers
         public IActionResult New(int id, Review review)
         {
             Product product = db.Products.Find(id);
-
-            review.Date = DateTime.Now;
-            review.ProductId = id; 
+ 
 
             try
             {
-                product.Reviews.Add(review); 
+                db.Reviews.Add(review); 
                 db.SaveChanges();
                 return Redirect("/Products/Show/" + id); 
             }
