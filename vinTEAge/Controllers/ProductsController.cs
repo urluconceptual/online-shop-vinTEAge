@@ -29,9 +29,11 @@ namespace vinTEAge.Controllers
         //HttpGet implicit
         public IActionResult Show(int id)
         {
-            Product product = db.Products.Include("Category").Where(prod => prod.ProductId == id).First();
+            Product product = db.Products.Include("Category").Include("Reviews").Where(prod => prod.ProductId == id).First();
 
             ViewBag.Product = product;
+
+            ViewBag.Reviews = product.Reviews;
 
             ViewBag.Category = product.Category;
 

@@ -22,6 +22,7 @@ namespace vinTEAge.Controllers
             Product product = db.Products.Include("Reviews").Where(prod => prod.ProductId == id).First();
 
             ViewBag.Product = product;
+
             ViewBag.Reviews = product.Reviews;
 
             return View(); 
