@@ -1,0 +1,16 @@
+﻿<h2>Spune-ne parerea ta!</h2>
+</br>
+
+<form method="post" action="/Reviews/New/@ViewBag.Product.ProductId">
+    <label>Adauga un review: </label></br>
+    <input type="text" name="Text" />
+    </br>
+    </br>
+
+    <label>Adauga un rating: </label></br>
+    <input type="number" min="1" max="10" name="Rating" />
+    </br>
+    </br>
+
+    <button class="btn btn-outline-secondary" type="submit">Posteaza review-ul!</button>
+</form>

@@ -1,4 +1,5 @@
-﻿<div class="card">
+﻿@*Afisare detalii produs*@
+<div class="card">
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <img src="@ViewBag.Product.Photo" class="card-img-top" alt="@ViewBag.Product.Title">
@@ -34,3 +35,36 @@
         </li>
     </ul>
 </div>
+
+
+
+@*Afisare comentarii produs*@
+@try
+{
+    @foreach (var review in ViewBag.Product.Reviews)
+    {
+        <div class="card text-center">
+            <div class="card-header">Urilizaor @review.ReviewUserId</div>
+            <div class="card-body">
+                <h5><i class="bi bi-star-half"></i> @review.Rating/10</h5>
+                <p class="card-text">@review.Text</p>
+            </div>
+            <div class="card-footer text-muted">
+                @review.Date
+            </div>
+        </div>
+    }
+}
+catch (NullReferenceException ex)
+{
+     <div class="card text-center">
+            <div class="card-header"></div>
+            <div class="card-body">
+                Acest produs nu are review-uri.
+            </div>
+            <div class="card-footer text-muted"></div>
+        </div>
+}
+
+
+
