@@ -3,31 +3,44 @@
 <h2>Produs nou!</h2>
 </br>
 
-<form method="post" action="/Products/New">
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Products", method: FormMethod.Post, routeValues: new { id = Model.ProductId }))
+{
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
     @Html.Label("Title", "Nume produs")
     <br />
     @Html.TextBox("Title", null, new { @class = "form-control" })
+    <br /><br />
+    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
     <br /><br />
 
     @Html.Label("Description", "Descriere produs")
     <br />
     @Html.TextArea("Description", null, new { @class = "form-control" })
     <br /><br />
+    @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+    <br /><br />
 
     @Html.Label("Photo", "Poza")
     <br />
     @Html.TextBox("Photo", null, new { @class = "form-control" })
+    <br /><br />
+    @Html.ValidationMessageFor(m => m.Photo, null, new { @class = "text-danger" })
     <br /><br />
 
     <label>Selectati categoria</label>
     @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categ, "Value", "Text"),
     "Selectati categoria", new { @class = "form-control" })
     <br />
+    @Html.ValidationMessageFor(m => m.Category, null, new { @class = "text-danger" })
+    <br /><br />
 
     @Html.Label("Price", "Pret")
     <br />
     @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type="numeric", min="1" })
     <br /><br />
+    @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
+    <br /><br />
 
     <button class="btn btn-outline-secondary" type="submit">Adauga produs</button>
-</form>
+}

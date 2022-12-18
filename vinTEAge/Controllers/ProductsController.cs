@@ -59,14 +59,14 @@ namespace vinTEAge.Controllers
             product.Reviews = null;
             product.Categ = GetAllCategories();
 
-            try
+            if (ModelState.IsValid)
             {
                 db.Products.Add(product);
                 db.SaveChanges();
                 TempData["message"] = "Produsul a fost adaugat";
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            else
             {
                 return View(product);
             }
@@ -92,22 +92,19 @@ namespace vinTEAge.Controllers
             Product product = db.Products.Find(id);
             requestProduct.Categ = GetAllCategories();
 
-            try
+            if (ModelState.IsValid)
             {
-                {
-                    product.Title = requestProduct.Title;
-                    product.Description = requestProduct.Description;
-                    product.Photo = requestProduct.Photo;
-                    product.CategoryId = requestProduct.CategoryId;
-                    product.Price = requestProduct.Price;
-                    TempData["message"] = "Produsul a fost modificat!";
-                    db.SaveChanges();
-                }
+                product.Title = requestProduct.Title;
+                product.Description = requestProduct.Description;
+                product.Photo = requestProduct.Photo;
+                product.CategoryId = requestProduct.CategoryId;
+                product.Price = requestProduct.Price;
+                TempData["message"] = "Produsul a fost modificat!";
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
-
-            catch (Exception)
+            else
             {
                 return View(requestProduct);
             }

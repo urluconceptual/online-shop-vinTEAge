@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@700&family=Unbounded&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Slabo+27px&family=Unbounded&display=swap');
 
-.font-cormorant {
-    font-family: 'Cormorant Infant', serif;
+.font-slabo {
+    font-family: 'Slabo 27px', serif;
 }
 
 .font-logo {
@@ -12,6 +12,10 @@
     margin-top:100px;
 }
 
+.back-color {
+    background-color: #ede5e3 !important;
+    color: #756f73;
+}
 
 html {
     font-size: 14px;
@@ -24,10 +28,36 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
   margin-bottom: 60px;
 }
+
+.navbar {
+    background-color: #e5b3ac !important;
+    border: none !important;
+    box-shadow: 0 3px 12px #636e72 !important;
+}
+
+.navbar-brand {
+    color: #ede5e3 !important;
+}
+
+a.nav-link {
+    color: #ede5e3 !important;
+}
+
+    a.nav-link:hover {
+        color: #eed5d1 !important;
+    }
+
+.logoutbtn {
+    color: #ede5e3 !important;
+}
+
+    .logoutbtn:hover {
+        color: #eed5d1 !important;
+    }
