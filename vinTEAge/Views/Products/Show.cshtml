@@ -15,6 +15,7 @@
         </li>
         <li class="list-group-item">
             <h5 class="card-subtitle mb-2 text-muted">@Model.Category.CategoryName</h5>
+            <div class="card-text p-2"><i class="bi bi-tag"></i> @Model.User.Email</div>
         </li>
 
         <li class="list-group-item">
@@ -24,17 +25,25 @@
         <li class="list-group-item">
             <div class="card-text">@Model.Description</div>
         </li>
-
+        @try
+        {
+            @if (ViewBag.AfisareButoane == true && Model.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+            {
+                <li class="list-group-item">
+                    <div class="d-flex flex-row align-content-center justify-content-start">
+                        <a class="btn btn-outline-secondary" href="/Products/Edit/@Model.ProductId">Editeaza produs</a>
+                        <form method="post" action="/Products/Delete/@Model.ProductId">
+                            <button class="btn btn-outline-secondary" type="submit">Sterge produs</button>
+                        </form>
+                </li>
+            }
+        }
+        catch { }
         <li class="list-group-item">
-            <div class="d-flex flex-row align-content-center justify-content-start">
-            <a class="btn btn-outline-secondary" href="/Products/Edit/@Model.ProductId">Editeaza produs</a>
-            <form method="post" action="/Products/Delete/@Model.ProductId">
-                <button class="btn btn-outline-secondary" type="submit">Sterge produs</button>
-            </form>
-            </div>
-            <div class="d-flex flex-row align-content-center justify-content-end">
-            <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId">Adauga review!</a>
-            </div>
+</div>
+<div class="d-flex flex-row align-content-center justify-content-end">
+    <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId">Adauga review!</a>
+</div>
         </li>
     </ul>
 </div>
@@ -51,7 +60,9 @@
 
 @*Afisare review-uri produs*@
 
-@{ bool noReviews = true; }
+@{
+    bool noReviews = true;
+}
 @foreach (var review in Model.Reviews)
 {
     noReviews = false;
@@ -65,19 +76,19 @@
 
         <div class="card-footer text-muted">
             <div class="d-flex d-flex justify-content-between align-items-center">
-               
-               <div>
+
+                <div>
                     <a class="btn btn-outline-secondary" href="/Reviews/Edit/@review.ReviewId"><i class="bi bi-pencil-square"></i>Editeaza</a>
-               </div>
+                </div>
 
-               <div>@review.Date</div>
+                <div>@review.Date</div>
 
-               <div>
+                <div>
                     <form method="post" action="/Reviews/Delete/@review.ReviewId">
                         <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-trash"></i>Sterge</button>
                     </form>
-               </div>
-           </div>
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -95,16 +106,3 @@
         <div class="card-footer text-muted"></div>
     </div>
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -15,10 +15,11 @@ namespace vinTEAge.Models
         [Range(1, 5, ErrorMessage = "Ratingul trebuie sa fie un numar natural intre 1 si 5!")]
         public int Rating { get; set; }
 
-        //public virtual IdentityUser User { get; set; }
+        public string? UserId { get; set; }
+        public virtual ApplicationUser? User { get; set; }
 
         public int? ProductId { get; set; }
-        public virtual Product? Product { get; set; }
+        public virtual Product? Products { get; set; }
 
         public DateTime Date { get; set; }
     }

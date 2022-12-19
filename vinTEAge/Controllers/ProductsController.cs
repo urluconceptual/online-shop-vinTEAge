@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using vinTEAge.Data;
@@ -6,17 +8,27 @@ using vinTEAge.Models;
 
 namespace vinTEAge.Controllers
 {
+    //[Authorize]
+
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext db;
-
-        public ProductsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public ProductsController(
+        ApplicationDbContext context,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager
+        )
         {
             db = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         //afisarea tuturor produselor din baza de date, impreuna cu categoria din care fac parte:
         //HttpGet implicit
+        //[Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Index()
         {
             var products = db.Products.Include("Category");
@@ -33,6 +45,7 @@ namespace vinTEAge.Controllers
 
         //afisarea unui singur produs, in functie de id:
         //HttpGet implicit
+        //[Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
             Product product = db.Products.Include("Category").Include("Reviews").Where(prod => prod.ProductId == id).First();
@@ -42,11 +55,14 @@ namespace vinTEAge.Controllers
                 ViewBag.Message = TempData["message"];
             }
 
+            SetAccessRights();
+
             return View(product);
         }
 
         //afisarea formularului in care se vor completa datele unui produs, impreuna cu categoria din care face parte:
         //HttpGet implicit
+        [Authorize(Roles = "Editor,Admin")]
         public IActionResult New()
         {
             Product product = new Product();
@@ -56,13 +72,14 @@ namespace vinTEAge.Controllers
             return View(product);
         }
 
-        //adaugarea atributului in baza de date:
+        //adaugarea produsului in baza de date:
+        [Authorize(Roles = "Editor,Admin")]
         [HttpPost]
-
         public IActionResult New(Product product)
         {
             product.Reviews = null;
-            product.Categ = GetAllCategories();
+            
+            product.UserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {
@@ -73,6 +90,7 @@ namespace vinTEAge.Controllers
             }
             else
             {
+                product.Categ = GetAllCategories();
                 return View(product);
             }
         }
@@ -81,16 +99,26 @@ namespace vinTEAge.Controllers
         // categoria se selecteaza dintr-un dropdown
         // HttpGet implicit
         // se afiseaza formularul impreuna cu datele aferente articolului din baza de date
+        [Authorize(Roles = "Editor,Admin")]
         public IActionResult Edit(int id)
         {
             Product product = db.Products.Include("Category").Where(prod => prod.ProductId == id).First();
 
             product.Categ = GetAllCategories();
 
-            return View(product);
+            if (product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                return View(product);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui produs care nu va apartine";
+                return RedirectToAction("Index");
+            }
         }
 
         //se adauga articolul modificat in baza de date
+        [Authorize(Roles = "Editor,Admin")]
         [HttpPost]
         public IActionResult Edit(int id, Product requestProduct)
         {
@@ -116,6 +144,7 @@ namespace vinTEAge.Controllers
         }
 
         // se sterge un produs din baza de date 
+        [Authorize(Roles = "Editor,Admin")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -161,6 +190,20 @@ namespace vinTEAge.Controllers
 
             // returnam lista de categorii
             return selectList;
+        }
+
+        private void SetAccessRights()
+        {
+            ViewBag.AfisareButoane = false;
+
+            if (User.IsInRole("Editor"))
+            {
+                ViewBag.AfisareButoane = true;
+            }
+
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
+
+            ViewBag.UserCurent = _userManager.GetUserId(User);
         }
     }
 }
