@@ -1,19 +1,31 @@
-﻿<h2>Spune-ne parerea ta!</h2>
+﻿@model vinTEAge.Models.Review
+
+<h2>Spune-ne parerea ta!</h2>
 </br>
 
-<form method="post" action="/Reviews/New/@ViewBag.Product.ProductId">
-    <label>Adauga un review: </label></br>
-    <textarea type="text" name="Text"></textarea>
-    </br>
-    </br>
+@using (Html.BeginForm(actionName: "New", controllerName: "Reviews", method: FormMethod.Post, routeValues: new { id = Model.ProductId }))
+{
+    @Html.Label("Text", "Review-ul tau: ")
+    <br />
+    @Html.TextArea("Text", null, new { @class = "form-control" })
+    <br />
+    <br />
+    @Html.ValidationMessageFor(m => m.Text, null, new { @class = "text-danger" })
+    <br />
+    <br />
 
-    <label>Adauga un rating: </label></br>
-    <input type="number" min="1" max="10" name="Rating" />
-    </br>
-    </br>
+    @Html.Label("Rating", "Rating-ul tau: ")
+    <br />
+    @Html.TextBox("Rating", null, new { @class = "form-control" })
+    <br />
+    <br />
+    @Html.ValidationMessageFor(m => m.Rating, null, new { @class = "text-danger" })
+    <br />
+    <br />
 
-    <input type="hidden" name="Date" value="@DateTime.Now" />
-    <input type="hidden" name="ProductId" value="@ViewBag.Product.ProductId" />
+    @Html.HiddenFor(m => m.ProductId, new{ value = Model.ProductId})
+    @Html.HiddenFor(m => m.Date, new{ value = DateTime.Now})
 
     <button class="btn btn-outline-secondary" type="submit">Posteaza review-ul!</button>
-</form>
+
+}

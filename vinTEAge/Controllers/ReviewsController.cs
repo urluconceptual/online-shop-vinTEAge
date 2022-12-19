@@ -19,13 +19,9 @@ namespace vinTEAge.Controllers
         // se afiseaza formularul in care se va intorduce review-ul impreuna cu ratingul
         public IActionResult New(int id)
         {
-            Product product = db.Products.Include("Reviews").Where(prod => prod.ProductId == id).First();
-
-            ViewBag.Product = product;
-
-            ViewBag.Reviews = product.Reviews;
-
-            return View(); 
+            Review review = new Review();
+            review.ProductId = id; 
+            return View(review); 
         }
 
 
@@ -33,18 +29,17 @@ namespace vinTEAge.Controllers
         [HttpPost]
         public IActionResult New(int id, Review review)
         {
-            Product product = db.Products.Find(id);
- 
-
-            try
+            if (ModelState.IsValid)
             {
+                review.Date = DateTime.Now;
                 db.Reviews.Add(review); 
                 db.SaveChanges();
+                TempData["message"] = "Review-ul a fost adaugat cu succes!";
                 return Redirect("/Products/Show/" + id); 
             }
-            catch (Exception)
+            else
             {
-                return RedirectToAction("New", id); 
+                return View(review); 
             }
         }
 
@@ -54,29 +49,31 @@ namespace vinTEAge.Controllers
         public IActionResult Edit(int id)
         {
             Review review = db.Reviews.Find(id);
-            ViewBag.Review = review;  
 
-            return View(); 
+            return View(review); 
         }
 
         //adaugarea review-ului in baza de date:
         [HttpPost]
         public IActionResult Edit(int id, Review requestReview)
         {
-            Review review = db.Reviews.Find(id); 
+            Review review = db.Reviews.Find(id);
 
-            try
+            if (ModelState.IsValid)
             {
                 review.Text = requestReview.Text;
                 review.Rating = requestReview.Rating;
-                review.Date = requestReview.Date; 
+                review.Date = DateTime.Now;
+                TempData["message"] = "Review-ul a fost modificat!";
                 db.SaveChanges();
 
                 return Redirect("/Products/Show/" + review.ProductId);
             }
-            catch (Exception)
+            else
             {
-                return RedirectToAction("Edit", id); 
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                ViewBag.Errors = errors; 
+                return View(requestReview); 
             }
         }
 

@@ -1,18 +1,46 @@
-﻿<h2>Modificarea review-ului @ViewBag.Review.ReviewId</h2>
-</br>
+﻿@model vinTEAge.Models.Review 
 
-<form method="post" action="/Reviews/Edit/@ViewBag.Review.ReviewId">
-    <label>Adauga un review: </label></br>
-    <textarea type="text" name="Text">@ViewBag.Review.Text</textarea>
-    </br>
-    </br>
+<h2>Modificarea review-ului @Model.ReviewId</h2>
+<br />
 
-    <label>Adauga un rating: </label></br>
-    <input type="number" min="1" max="10" value="@ViewBag.Review.Rating" name="Rating" />
-    </br>
-    </br>
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Reviews", method: FormMethod.Post, routeValues: new { id = Model.ReviewId }))
+{
+    @Html.Label("Text", "Review-ul tau: ")
+    <br />
+    @Html.EditorFor(m => m.Text, new { htmlAttributes = new { @class = "form-control" }, value = Model.Text })
+    <br />
+    <br />
+   @Html.ValidationMessageFor(m => m.Text, null, new { @class = "text-danger" })
+    <br />
+    <br />
 
-    <input type="hidden" name="Date" value="@DateTime.Now" />
+    @Html.Label("Rating", "Rating-ul tau: ")
+    <br />
+    @Html.EditorFor(m => m.Rating, new { htmlAttributes = new { @class = "form-control" }, value = Model.Rating })
+    <br />
+    <br />
+    @Html.ValidationMessageFor(m => m.Rating, null, new { @class = "text-danger" })
+    <br />
+    <br />
 
+    @Html.HiddenFor(m => m.ProductId, new{ value = Model.ProductId})
+    @Html.HiddenFor(m => m.Date, new{ value = DateTime.Now})
+    
     <button class="btn btn-outline-secondary" type="submit">Editeaza review-ul!</button>
-</form>
+}
+
+
+@try
+{
+        @foreach(var err in ViewBag.Errors)
+    {
+        <div>
+            @err
+        </div>
+    }
+
+}
+catch
+{
+
+}

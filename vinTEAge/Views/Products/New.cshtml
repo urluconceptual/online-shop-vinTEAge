@@ -3,7 +3,7 @@
 <h2>Produs nou!</h2>
 </br>
 
-@using (Html.BeginForm(actionName: "New", controllerName: "Products", method: FormMethod.Post, routeValues: new { id = Model.ProductId }))
+@using (Html.BeginForm(actionName: "New", controllerName: "Products", method: FormMethod.Post))
 {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
