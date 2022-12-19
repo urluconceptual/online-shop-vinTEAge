@@ -37,6 +37,11 @@ namespace vinTEAge.Controllers
         {
             Product product = db.Products.Include("Category").Include("Reviews").Where(prod => prod.ProductId == id).First();
 
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Message = TempData["message"];
+            }
+
             return View(product);
         }
 

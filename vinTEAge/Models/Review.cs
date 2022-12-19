@@ -8,16 +8,17 @@ namespace vinTEAge.Models
         [Key]
         public int ReviewId { get; set; }
 
-        [Required(ErrorMessage = "Continutul este obligatoriu!")]
+        [Required(ErrorMessage = "Continutul review-ului este obligatoriu!")]
         public string Text { get; set; }
 
-        [Required(ErrorMessage = "Continutul este obligatoriu!")]
+        [Required(ErrorMessage = "Ratingul este obligatoriu!")]
+        [Range(1, 5, ErrorMessage = "Ratingul trebuie sa fie un numar natural intre 1 si 5!")]
         public int Rating { get; set; }
 
-        public virtual IdentityUser User { get; set; }
+        //public virtual IdentityUser User { get; set; }
 
-        public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
+        public int? ProductId { get; set; }
+        public virtual Product? Product { get; set; }
 
         public DateTime Date { get; set; }
     }
