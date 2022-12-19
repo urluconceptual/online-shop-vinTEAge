@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static Humanizer.On;
 
 namespace vinTEAge.Models
 {
@@ -30,6 +29,9 @@ namespace vinTEAge.Models
         public virtual Category? Category { get; set; }
 
         public float? Rating { get; set; }
+
+        public string? UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<Review>? Reviews { get; set; }
 

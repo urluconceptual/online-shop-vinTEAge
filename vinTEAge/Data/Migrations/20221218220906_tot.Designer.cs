@@ -12,8 +12,8 @@ using vinTEAge.Data;
 namespace vinTEAge.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221215093154_NullProd")]
-    partial class NullProd
+    [Migration("20221218220906_tot")]
+    partial class tot
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -251,7 +251,8 @@ namespace vinTEAge.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -270,6 +271,10 @@ namespace vinTEAge.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId");
@@ -290,10 +295,10 @@ namespace vinTEAge.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReviewUserId")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -301,13 +306,11 @@ namespace vinTEAge.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ReviewId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
                 });
@@ -378,17 +381,9 @@ namespace vinTEAge.Data.Migrations
                 {
                     b.HasOne("vinTEAge.Models.Product", "Product")
                         .WithMany("Reviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("vinTEAge.Models.Category", b =>
