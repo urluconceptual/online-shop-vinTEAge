@@ -40,15 +40,15 @@ namespace vinTEAge.Controllers
         [HttpPost]
         public ActionResult New(Category cat)
         {
-            try
+            if (ModelState.IsValid)
             {
                 db.Categories.Add(cat);
                 db.SaveChanges();
-                TempData["message"] = "Categoria a fost adaugata!";
+                TempData["message"] = "Categoria a fost adaugata";
                 return RedirectToAction("Index");
             }
 
-            catch (Exception e)
+            else
             {
                 return View(cat);
             }
@@ -64,7 +64,8 @@ namespace vinTEAge.Controllers
         public ActionResult Edit(int id, Category requestCategory)
         {
             Category category = db.Categories.Find(id);
-            try
+
+            if (ModelState.IsValid)
             {
 
                 category.CategoryName = requestCategory.CategoryName;
@@ -72,7 +73,7 @@ namespace vinTEAge.Controllers
                 TempData["message"] = "Categoria a fost modificata!";
                 return RedirectToAction("Index");
             }
-            catch (Exception e)
+            else
             {
                 return View(requestCategory);
             }
@@ -83,7 +84,7 @@ namespace vinTEAge.Controllers
         {
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
-            TempData["message"] = "Categoria a fost stearsa!";
+            TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();
             return RedirectToAction("Index");
         }

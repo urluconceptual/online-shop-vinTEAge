@@ -17,7 +17,7 @@
         </li>
 
         <li class="list-group-item">
-            <div class="card-text"><i class="bi bi-star-half"></i> @Model.Rating/10</div>
+            <div class="card-text"><i class="bi bi-star-half"></i> @Model.Rating/5</div>
         </li>
 
         <li class="list-group-item">
@@ -43,6 +43,11 @@
 </br>
 
 
+@if (ViewBag.Message != null)
+{
+    <h2 class="alert-secondary p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
+}
+
 @*Afisare review-uri produs*@
 
 @{ bool noReviews = true; }
@@ -53,7 +58,7 @@
         <div class="card-header">@*Utilizator @review.UserId*@</div>
 
         <div class="card-body">
-            <h5><i class="bi bi-star-half"></i> @review.Rating/10</h5>
+            <h5><i class="bi bi-star-half"></i> @review.Rating/5</h5>
             <p class="card-text">@review.Text</p>
         </div>
 
