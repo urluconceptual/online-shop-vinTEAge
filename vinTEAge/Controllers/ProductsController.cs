@@ -55,6 +55,8 @@ namespace vinTEAge.Controllers
                 ViewBag.Message = TempData["message"];
             }
 
+            SetAccessRights();
+
             return View(product);
         }
 
@@ -188,6 +190,20 @@ namespace vinTEAge.Controllers
 
             // returnam lista de categorii
             return selectList;
+        }
+
+        private void SetAccessRights()
+        {
+            ViewBag.AfisareButoane = false;
+
+            if (User.IsInRole("Editor"))
+            {
+                ViewBag.AfisareButoane = true;
+            }
+
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
+
+            ViewBag.UserCurent = _userManager.GetUserId(User);
         }
     }
 }

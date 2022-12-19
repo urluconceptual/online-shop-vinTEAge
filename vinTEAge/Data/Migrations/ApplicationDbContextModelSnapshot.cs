@@ -17,7 +17,7 @@ namespace vinTEAge.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.11")
+                .HasAnnotation("ProductVersion", "6.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -305,9 +305,14 @@ namespace vinTEAge.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ReviewId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
                 });
@@ -382,7 +387,7 @@ namespace vinTEAge.Data.Migrations
 
             modelBuilder.Entity("vinTEAge.Models.Review", b =>
                 {
-                    b.HasOne("vinTEAge.Models.Product", "Product")
+                    b.HasOne("vinTEAge.Models.Product", "Products")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId");
 
@@ -390,7 +395,9 @@ namespace vinTEAge.Data.Migrations
                         .WithMany("Reviews")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Product");
+                    b.Navigation("Products");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("vinTEAge.Models.ApplicationUser", b =>
