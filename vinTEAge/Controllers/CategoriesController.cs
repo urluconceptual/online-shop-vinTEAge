@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using vinTEAge.Data;
 using vinTEAge.Models;
 
 namespace vinTEAge.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext db;

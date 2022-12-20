@@ -31,7 +31,7 @@ namespace vinTEAge.Models
         public float? Rating { get; set; }
 
         public string? UserId { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
 
         public virtual ICollection<Review>? Reviews { get; set; }
 

@@ -48,7 +48,7 @@ namespace vinTEAge.Controllers
         //[Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
-            Product product = db.Products.Include("Category").Include("Reviews").Where(prod => prod.ProductId == id).First();
+            Product product = db.Products.Include("Category").Include("Reviews").Include("User").Where(prod => prod.ProductId == id).First();
 
             if (TempData.ContainsKey("message"))
             {
@@ -127,15 +127,24 @@ namespace vinTEAge.Controllers
 
             if (ModelState.IsValid)
             {
-                product.Title = requestProduct.Title;
-                product.Description = requestProduct.Description;
-                product.Photo = requestProduct.Photo;
-                product.CategoryId = requestProduct.CategoryId;
-                product.Price = requestProduct.Price;
-                TempData["message"] = "Produsul a fost modificat!";
-                db.SaveChanges();
+                if (product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+                {
+                    product.Title = requestProduct.Title;
+                    product.Description = requestProduct.Description;
+                    product.Photo = requestProduct.Photo;
+                    product.CategoryId = requestProduct.CategoryId;
+                    product.Price = requestProduct.Price;
+                    TempData["message"] = "Produsul a fost modificat!";
+                    db.SaveChanges();
 
-                return RedirectToAction("Index");
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui produs care nu va apartine";
+                    return RedirectToAction("Index");
+                }
             }
             else
             {
@@ -148,11 +157,20 @@ namespace vinTEAge.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
-            TempData["message"] = "Produsul a fost sters!";
-            return RedirectToAction("Index");
+            Product product = db.Products.Include("Reviews").Where(prod => prod.ProductId == id).First();
+
+            if (product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                db.Products.Remove(product);
+                db.SaveChanges();
+                TempData["message"] = "Produsul a fost sters!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa stergeti un produs care nu va apartine!";
+                return RedirectToAction("Index");
+            }
         }
 
         [NonAction]
