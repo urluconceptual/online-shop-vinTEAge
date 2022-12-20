@@ -143,10 +143,31 @@ namespace vinTEAge.Controllers
         //se adauga articolul modificat in baza de date
         [Authorize(Roles = "Editor,Admin")]
         [HttpPost]
-        public IActionResult Edit(int id, Product requestProduct)
+        public async Task<IActionResult> Edit(int id, Product requestProduct, IFormFile? ProductImage = null)
         {
             Product product = db.Products.Find(id);
             requestProduct.Categ = GetAllCategories();
+
+            if (ProductImage != null)
+            {
+                if (ProductImage.Length > 0)
+                {
+                    // Generam calea de stocare a fisierului
+                    var storagePath = Path.Combine(
+                    _env.WebRootPath, // Luam calea folderului wwwroot
+                    "images", // Adaugam calea folderului images
+                    ProductImage.FileName // Numele fisierului
+                    );
+                    // General calea de afisare a fisierului care va fi stocata in  baza de date
+                    var databaseFileName = "/images/" + ProductImage.FileName;
+                    // Uploadam fisierul la calea de storage
+                    using (var fileStream = new FileStream(storagePath, FileMode.Create))
+                    {
+                        await ProductImage.CopyToAsync(fileStream);
+                    }
+                    product.Photo = databaseFileName;
+                }
+            }
 
             if (ModelState.IsValid)
             {

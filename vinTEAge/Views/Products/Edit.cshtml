@@ -3,8 +3,10 @@
 <h2>Modificare "@Model.ProductId. @Model.Title"</h2>
 </br>
 
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Products", method: FormMethod.Post, routeValues: new { id = Model.ProductId }))
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Products", method: FormMethod.Post, routeValues: new { id = Model.ProductId, enctype = "multipart/form-data" }))
 {
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
     @Html.Label("Title", "Nume produs")
     <br />
     @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" }, value = Model.Title })
@@ -23,14 +25,12 @@
     <br />
     <br />
 
-    @Html.Label("Photo", "Poza")
+    @Html.Label("ProductImage", "Poza")
     <br />
-    @Html.EditorFor(m => m.Photo, new { htmlAttributes = new { @class = "form-control" }, value = Model.Photo })
-    <br />
-    <br />
-    @Html.ValidationMessageFor(m => m.Photo, null, new { @class = "text-danger" })
+    @Html.TextBox("ProductImage", null, new { type = "file", @class = "form-control", value="" })
     <br />
     <br />
+    @Html.HiddenFor(m => m.Photo, new {value=Model.Photo})
 
     @Html.HiddenFor(m => m.Rating)
 

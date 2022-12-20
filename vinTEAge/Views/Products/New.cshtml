@@ -25,7 +25,8 @@
     <br />
     @Html.TextBox("ProductImage", null, new { type = "file", @class = "form-control" })
     <br /><br />
-    @Html.HiddenFor(m => m.Photo, new {value=""})
+
+    //@Html.HiddenFor(m => m.Photo, new { value="" } )
 
     <label>Selectati categoria</label>
     @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categ, "Value", "Text"),

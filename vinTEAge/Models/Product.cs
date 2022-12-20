@@ -18,8 +18,8 @@ namespace vinTEAge.Models
         [Required(ErrorMessage = "Descrierea produsului este obligatorie!")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Poza cu produsul este obligatorie!")]
-        public string Photo { get; set; }
+        //[Required(ErrorMessage = "Poza cu produsul este obligatorie!")]
+        public string? Photo { get; set; }
 
         [Required(ErrorMessage = "Pretul produsului este obligatoriu!")]
         public double Price { get; set; }
