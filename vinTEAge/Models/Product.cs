@@ -35,6 +35,8 @@ namespace vinTEAge.Models
 
         public virtual ICollection<Review>? Reviews { get; set; }
 
+        public virtual ICollection<InCart>? InCarts{ get; set; }
+
         [NotMapped]
         public IEnumerable<SelectListItem>? Categ { get; set; }
     }
