@@ -3,7 +3,7 @@
 <h2>Produs nou!</h2>
 </br>
 
-@using (Html.BeginForm(actionName: "New", controllerName: "Products", method: FormMethod.Post))
+@using (Html.BeginForm(actionName: "New", controllerName: "Products", method: FormMethod.Post, new{ enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
@@ -21,12 +21,11 @@
     @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
     <br /><br />
 
-    @Html.Label("Photo", "Poza")
+    @Html.Label("ProductImage", "Poza")
     <br />
-    @Html.TextBox("Photo", null, new { @class = "form-control" })
+    @Html.TextBox("ProductImage", null, new { type = "file", @class = "form-control" })
     <br /><br />
-    @Html.ValidationMessageFor(m => m.Photo, null, new { @class = "text-danger" })
-    <br /><br />
+    @Html.HiddenFor(m => m.Photo, new {value=""})
 
     <label>Selectati categoria</label>
     @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categ, "Value", "Text"),

@@ -3,27 +3,32 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using vinTEAge.Data;
 using vinTEAge.Models;
 
 namespace vinTEAge.Controllers
 {
-    //[Authorize]
 
     public class ProductsController : Controller
     {
+        private IWebHostEnvironment _env;
+
         private readonly ApplicationDbContext db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+
         public ProductsController(
         ApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager
+        RoleManager<IdentityRole> roleManager,
+        IWebHostEnvironment env
         )
         {
             db = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _env = env;
         }
 
         //afisarea tuturor produselor din baza de date, impreuna cu categoria din care fac parte:
@@ -75,11 +80,29 @@ namespace vinTEAge.Controllers
         //adaugarea produsului in baza de date:
         [Authorize(Roles = "Editor,Admin")]
         [HttpPost]
-        public IActionResult New(Product product)
+        public async  Task<IActionResult> New(Product product, IFormFile ProductImage)
         {
             product.Reviews = null;
-            
             product.UserId = _userManager.GetUserId(User);
+
+            if (ProductImage.Length > 0)
+            {
+                // Generam calea de stocare a fisierului
+                var storagePath = Path.Combine(
+                _env.WebRootPath, // Luam calea folderului wwwroot
+                "images", // Adaugam calea folderului images
+                ProductImage.FileName // Numele fisierului
+                );
+                // General calea de afisare a fisierului care va fi stocata in  baza de date
+                var databaseFileName = "/images/" + ProductImage.FileName;
+                // Uploadam fisierul la calea de storage
+                using (var fileStream = new FileStream(storagePath, FileMode.Create))
+                {
+                    await ProductImage.CopyToAsync(fileStream);
+                }
+                product.Photo = databaseFileName;
+            }
+
 
             if (ModelState.IsValid)
             {
