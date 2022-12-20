@@ -53,7 +53,11 @@ namespace vinTEAge.Controllers
         //[Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Show(int id)
         {
-            Product product = db.Products.Include("Category").Include("Reviews").Include("User").Where(prod => prod.ProductId == id).First();
+            Product product = db.Products.Include("Category")
+                                         .Include("Reviews")
+                                         .Include("User")
+                                         .Include("Reviews.User")
+                                         .Where(prod => prod.ProductId == id).First();
 
             if (TempData.ContainsKey("message"))
             {

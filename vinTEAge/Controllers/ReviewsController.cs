@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vinTEAge.Data;
 using vinTEAge.Models; 
@@ -8,15 +10,23 @@ namespace vinTEAge.Controllers
     public class ReviewsController : Controller
     {
         private readonly ApplicationDbContext db;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public ReviewsController(ApplicationDbContext context)
+        public ReviewsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
-            db = context;
+            db = context; 
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
+
+
 
         //adaugarea unui review asociat unui produs din baza de date 
         // HttpGet implicit
         // se afiseaza formularul in care se va intorduce review-ul impreuna cu ratingul
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult New(int id)
         {
             Review review = new Review();
@@ -26,12 +36,14 @@ namespace vinTEAge.Controllers
 
 
         //adaugarea review-ului in baza de date:
+        [Authorize(Roles = "User,Editor,Admin")]
         [HttpPost]
         public IActionResult New(int id, Review review)
         {
             if (ModelState.IsValid)
             {
                 review.Date = DateTime.Now;
+                review.UserId = _userManager.GetUserId(User);
                 db.Reviews.Add(review); 
                 db.SaveChanges();
                 TempData["message"] = "Review-ul a fost adaugat cu succes!";
@@ -46,28 +58,51 @@ namespace vinTEAge.Controllers
         //modificarea unui review asociat unui produs din baza de date 
         // HttpGet implicit
         // se afiseaza formularul in care se va intorduce review-ul impreuna cu ratingul
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Edit(int id)
         {
             Review review = db.Reviews.Find(id);
 
-            return View(review); 
+            if (review.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                return View(review);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa modificati comentariul!";
+                return RedirectToAction("/Products/Show/" + review.ProductId);
+            }
+
+
+
         }
 
         //adaugarea review-ului in baza de date:
         [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Edit(int id, Review requestReview)
         {
             Review review = db.Reviews.Find(id);
 
             if (ModelState.IsValid)
             {
-                review.Text = requestReview.Text;
-                review.Rating = requestReview.Rating;
-                review.Date = DateTime.Now;
-                TempData["message"] = "Review-ul a fost modificat!";
-                db.SaveChanges();
+                if (review.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+                {
+                    review.Text = requestReview.Text;
+                    review.Rating = requestReview.Rating;
+                    review.Date = DateTime.Now;
+                    TempData["message"] = "Review-ul a fost modificat!";
+                    db.SaveChanges();
 
-                return Redirect("/Products/Show/" + review.ProductId);
+                    return Redirect("/Products/Show/" + review.ProductId);
+                }
+                else
+                {
+                    TempData["message"] = "Nu aveti dreptul sa modificati comentariul!";
+                    return RedirectToAction("/Products/Show/" + review.ProductId);
+                }
+
+              
             }
             else
             {
@@ -79,12 +114,24 @@ namespace vinTEAge.Controllers
 
         //stergerea unui review asociat unui produs din baza de date
         [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Delete(int id)
         {
             Review review = db.Reviews.Find(id);
-            db.Reviews.Remove(review);
-            db.SaveChanges();
-            return Redirect("/Products/Show/" + review.ProductId);
+
+            if (review.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+            {
+                db.Reviews.Remove(review);
+                db.SaveChanges();
+                return Redirect("/Products/Show/" + review.ProductId);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa stergeti comentariul!";
+                return RedirectToAction("/Products/Show/" + review.ProductId);
+            }
+
+            
         }
 
     }

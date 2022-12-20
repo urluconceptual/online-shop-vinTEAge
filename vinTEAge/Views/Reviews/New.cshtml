@@ -23,6 +23,7 @@
     <br />
     <br />
 
+    @Html.HiddenFor(m => m.UserId, new{ value = Model.UserId})
     @Html.HiddenFor(m => m.ProductId, new{ value = Model.ProductId})
     @Html.HiddenFor(m => m.Date, new{ value = DateTime.Now})
 
