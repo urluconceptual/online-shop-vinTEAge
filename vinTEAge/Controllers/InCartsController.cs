@@ -1,170 +1,140 @@
-﻿//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Mvc;
-//using vinTEAge.Data;
-//using vinTEAge.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using vinTEAge.Data;
+using vinTEAge.Models;
 
-//namespace vinTEAge.Controllers
-//{
-//    [Authorize]
-//    public class InCartsController : Controller
-//    {
-//        private readonly ApplicationDbContext db;
+namespace vinTEAge.Controllers
+{
+    [Authorize]
+    public class InCartsController : Controller
+    {
+        private readonly ApplicationDbContext db;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-//        private readonly UserManager<ApplicationUser> _userManager;
+        public InCartsController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager
+            )
+        {
+            db = context;
 
-//        private readonly RoleManager<IdentityRole> _roleManager;
+            _userManager = userManager;
 
-//        public InCartsController(
-//            ApplicationDbContext context,
-//            UserManager<ApplicationUser> userManager,
-//            RoleManager<IdentityRole> roleManager
-//            )
-//        {
-//            db = context;
+            _roleManager = roleManager;
+        }
 
-//            _userManager = userManager;
+        //        [Authorize(Roles = "User,Editor,Admin")]
+        //        // fiecare utilizator vede propriul cos de cumparaturi
+        //        // HttpGet - implicit
+        //        public IActionResult Index()
+        //        {
+        //            if (TempData.ContainsKey("message"))
+        //            {
+        //                ViewBag.Message = TempData["message"];
+        //            }
 
-//            _roleManager = roleManager;
-//        }
+        //            SetAccessRights();
 
-//        [Authorize(Roles = "User,Editor,Admin")]
-//        // fiecare utilizator vede propriul cos de cumparaturi
-//        // HttpGet - implicit
-//        public IActionResult Index()
-//        {
-//            if (TempData.ContainsKey("message"))
-//            {
-//                ViewBag.Message = TempData["message"];
-//            }
+        //            if (User.IsInRole("User") || User.IsInRole("Editor"))
+        //            {
+        //                var bookmarks = from bookmark in db.Bookmarks.Include("User")
+        //                               .Where(b => b.UserId == _userManager.GetUserId(User))
+        //                                select bookmark;
 
-//            SetAccessRights();
+        //                ViewBag.Bookmarks = bookmarks;
 
-//            if (User.IsInRole("User") || User.IsInRole("Editor"))
-//            {
-//                var bookmarks = from bookmark in db.Bookmarks.Include("User")
-//                               .Where(b => b.UserId == _userManager.GetUserId(User))
-//                                select bookmark;
+        //                return View();
+        //            }
+        //            else
+        //            if (User.IsInRole("Admin"))
+        //            {
+        //                var bookmarks = from bookmark in db.Bookmarks.Include("User")
+        //                                select bookmark;
 
-//                ViewBag.Bookmarks = bookmarks;
+        //                ViewBag.Bookmarks = bookmarks;
 
-//                return View();
-//            }
-//            else
-//            if (User.IsInRole("Admin"))
-//            {
-//                var bookmarks = from bookmark in db.Bookmarks.Include("User")
-//                                select bookmark;
+        //                return View();
+        //            }
 
-//                ViewBag.Bookmarks = bookmarks;
+        //            else
+        //            {
+        //                TempData["message"] = "Nu aveti drepturi";
+        //                return RedirectToAction("Index", "Articles");
+        //            }
 
-//                return View();
-//            }
+        //        }
 
-//            else
-//            {
-//                TempData["message"] = "Nu aveti drepturi";
-//                return RedirectToAction("Index", "Articles");
-//            }
+        // Afisarea tuturor articolelor pe care utilizatorul le-a salvat in 
+        // bookmark-ul sau 
 
-//        }
+        [Authorize(Roles = "User")]
+        public IActionResult Show()
+        {
 
-//        // Afisarea tuturor articolelor pe care utilizatorul le-a salvat in 
-//        // bookmark-ul sau 
+            if (User.IsInRole("User") )
+            {
+                var cartNotEmpty = db.InCarts
+                                  .Include("Product")
+                                  .Where(b => b.ProductId == )
+                                  .Where(b => b.UserId == _userManager.GetUserId(User))
+                                  .FirstOrDefault();
 
-//        [Authorize(Roles = "User,Editor,Admin")]
-//        public IActionResult Show(int id)
-//        {
-//            SetAccessRights();
+                if (cartNotEmpty == null)
+                {
+                    TempData["message"] = "Nu aveti drepturi";
+                    return RedirectToAction("Index", "Articles");
+                }
 
-//            if (User.IsInRole("User") || User.IsInRole("Editor"))
-//            {
-//                var bookmarks = db.Bookmarks
-//                                  .Include("ArticleBookmarks.Article.Category")
-//                                  .Include("ArticleBookmarks.Article.User")
-//                                  .Include("User")
-//                                  .Where(b => b.Id == id)
-//                                  .Where(b => b.UserId == _userManager.GetUserId(User))
-//                                  .FirstOrDefault();
-
-//                if (bookmarks == null)
-//                {
-//                    TempData["message"] = "Nu aveti drepturi";
-//                    return RedirectToAction("Index", "Articles");
-//                }
-
-//                return View(bookmarks);
-//            }
-
-//            else
-//            if (User.IsInRole("Admin"))
-//            {
-//                var bookmarks = db.Bookmarks
-//                                  .Include("ArticleBookmarks.Article.Category")
-//                                  .Include("ArticleBookmarks.Article.User")
-//                                  .Include("User")
-//                                  .Where(b => b.Id == id)
-//                                  .FirstOrDefault();
+                return View(cartNotEmpty);
+            }
+            return View(); 
+        }
 
 
-//                if (bookmarks == null)
-//                {
-//                    TempData["message"] = "Resursa cautata nu poate fi gasita";
-//                    return RedirectToAction("Index", "Articles");
-//                }
+        //        [Authorize(Roles = "User,Editor,Admin")]
+        //        public IActionResult New()
+        //        {
+        //            return View();
+        //        }
+
+        //        [HttpPost]
+        //        [Authorize(Roles = "User,Editor,Admin")]
+        //        public ActionResult New(Bookmark bm)
+        //        {
+        //            bm.UserId = _userManager.GetUserId(User);
+
+        //            if (ModelState.IsValid)
+        //            {
+        //                db.Bookmarks.Add(bm);
+        //                db.SaveChanges();
+        //                TempData["message"] = "Colectia a fost adaugata";
+        //                return RedirectToAction("Index");
+        //            }
+
+        //            else
+        //            {
+        //                return View(bm);
+        //            }
+        //        }
 
 
-//                return View(bookmarks);
-//            }
+        //        // Conditiile de afisare a butoanelor de editare si stergere
+        //        private void SetAccessRights()
+        //        {
+        //            ViewBag.AfisareButoane = false;
 
-//            else
-//            {
-//                TempData["message"] = "Nu aveti drepturi";
-//                return RedirectToAction("Index", "Articles");
-//            }
-//        }
+        //            if (User.IsInRole("Editor") || User.IsInRole("User"))
+        //            {
+        //                ViewBag.AfisareButoane = true;
+        //            }
 
+        //            ViewBag.EsteAdmin = User.IsInRole("Admin");
 
-//        [Authorize(Roles = "User,Editor,Admin")]
-//        public IActionResult New()
-//        {
-//            return View();
-//        }
-
-//        [HttpPost]
-//        [Authorize(Roles = "User,Editor,Admin")]
-//        public ActionResult New(Bookmark bm)
-//        {
-//            bm.UserId = _userManager.GetUserId(User);
-
-//            if (ModelState.IsValid)
-//            {
-//                db.Bookmarks.Add(bm);
-//                db.SaveChanges();
-//                TempData["message"] = "Colectia a fost adaugata";
-//                return RedirectToAction("Index");
-//            }
-
-//            else
-//            {
-//                return View(bm);
-//            }
-//        }
-
-
-//        // Conditiile de afisare a butoanelor de editare si stergere
-//        private void SetAccessRights()
-//        {
-//            ViewBag.AfisareButoane = false;
-
-//            if (User.IsInRole("Editor") || User.IsInRole("User"))
-//            {
-//                ViewBag.AfisareButoane = true;
-//            }
-
-//            ViewBag.EsteAdmin = User.IsInRole("Admin");
-
-//            ViewBag.UserCurent = _userManager.GetUserId(User);
-//        }
-//    }
-//}
+        //            ViewBag.UserCurent = _userManager.GetUserId(User);
+        //        }
+    }
+    }

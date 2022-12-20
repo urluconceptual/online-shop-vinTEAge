@@ -5,6 +5,10 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+
+     <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-page="/InCarts/Show"><i class="bi bi-bag-heart"></i></a>
+     </li>
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Bine ai venit, @User.Identity?.Name!</a>
     </li>
@@ -16,6 +20,8 @@
 }
 else
 {
+   
+
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Creare cont</a>
     </li>
