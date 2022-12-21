@@ -42,7 +42,20 @@
         catch { }
         <li class="list-group-item">
             <div class="d-flex flex-row align-content-center justify-content-end">
-                <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId">Adauga review!</a>
+                @if (ViewBag.EsteUser)
+                {
+                    <form method="post" action="/InCarts/New">
+                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                        <input type="hidden" name="UserId" value="@ViewBag.UserCurent" />
+                        <input type="hidden" name="Date" value="@DateTime.Now" />
+                        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-bag-plus"></i> Adauga in cos</button>
+                    </form>
+                    <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId"><i class="bi bi-vector-pen"></i> Adauga review</a>
+                }
+                @if (!ViewBag.EsteUser && !ViewBag.EsteAdmin && !ViewBag.EsteEditor) {
+                    <button class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-bag-plus"></i>Adauga in cos </button>
+                    <button class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-vector-pen"></i>Adauga comentariu </button>
+                }
             </div>
         </li>
     </ul>

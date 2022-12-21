@@ -70,7 +70,7 @@ namespace vinTEAge.Controllers
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa modificati comentariul!";
-                return RedirectToAction("/Products/Show/" + review.ProductId);
+                return Redirect("/Products/Show/" + review.ProductId);
             }
 
 

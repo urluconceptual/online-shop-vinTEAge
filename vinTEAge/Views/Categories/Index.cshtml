@@ -6,10 +6,6 @@
     <h1>@ViewBag.message</h1>
 }
 
-<a href="/Products/Index">Inapoi la produse</a>
-<br />
-<br />
-
 @foreach (var category in ViewBag.Categories)
 {
     <hr />
@@ -20,6 +16,7 @@
     <br />
     <br />
 }
+<hr />
 <br />
 <a class="btn btn-outline-secondary" href="/Categories/New">Adauga o noua categorie</a>
 <br />

@@ -269,6 +269,10 @@ namespace vinTEAge.Controllers
 
             ViewBag.EsteAdmin = User.IsInRole("Admin");
 
+            ViewBag.EsteUser = User.IsInRole("User");
+
+            ViewBag.EsteEditor = User.IsInRole("Editor");
+
             ViewBag.UserCurent = _userManager.GetUserId(User);
         }
     }
