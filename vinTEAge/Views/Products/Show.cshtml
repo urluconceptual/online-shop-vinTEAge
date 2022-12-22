@@ -1,5 +1,10 @@
 ﻿@model vinTEAge.Models.Product
 
+@if (ViewBag.MessageCart != null)
+{
+    <h2 class="alert-secondary p-3 rounded-3 text-center mb-5">@ViewBag.MessageCart</h2>
+}
+
 @*Afisare detalii produs*@
 <div class="card">
     <ul class="list-group list-group-flush">
@@ -24,7 +29,7 @@
         </li>
 
         <li class="list-group-item">
-            <div class="card-text">@Model.Description</div>
+            <div class="card-text">@Html.Raw(Model.Description)</div>
         </li>
         @try
         {
@@ -53,8 +58,8 @@
                     <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId"><i class="bi bi-vector-pen"></i> Adauga review</a>
                 }
                 @if (!ViewBag.EsteUser && !ViewBag.EsteAdmin && !ViewBag.EsteEditor) {
-                    <button class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-bag-plus"></i>Adauga in cos </button>
-                    <button class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-vector-pen"></i>Adauga comentariu </button>
+                    <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-bag-plus"></i> Adauga in cos </a>
+                    <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-vector-pen"></i> Adauga review </a>
                 }
             </div>
         </li>

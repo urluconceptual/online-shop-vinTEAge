@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -45,6 +46,99 @@ namespace vinTEAge.Controllers
                 ViewBag.Message = TempData["message"];
             }
 
+            if (TempData.ContainsKey("messageCart"))
+            {
+                ViewBag.MessageCart = TempData["messageCart"];
+            }
+
+            var search = "";
+
+            // MOTOR DE CAUTARE
+
+            if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
+            {
+                search = Convert.ToString(HttpContext.Request.Query["search"]).Trim(); // eliminam spatiile libere 
+
+                // Cautare in articol (Title si Content)
+
+                List<int> productIds = db.Products.Include("Category").Where
+                                        (
+                                         at => at.Title.Contains(search)
+                                         || at.Description.Contains(search)
+                                         || at.Category.CategoryName.Contains(search)
+                                        ).Select(a => a.ProductId).ToList();
+
+                // Cautare in comentarii (Content)
+                List<int> productIdsOfCommentsWithSearchString = db.Reviews
+                                        .Where
+                                        (
+                                         c => c.Text.Contains(search)
+                                        ).Select(c => (int)c.ProductId).ToList();
+
+                // Se formeaza o singura lista formata din toate id-urile selectate anterior
+                List<int> mergedIds = productIds.Union(productIdsOfCommentsWithSearchString).ToList();
+
+
+                // Lista articolelor care contin cuvantul cautat
+                // fie in articol -> Title si Content
+                // fie in comentarii -> Content
+                products = db.Products.Where(product => mergedIds.Contains(product.ProductId))
+                                      .Include("Category")
+                                      .Include("User")
+                                      .OrderBy(a => a.Title);
+
+            }
+
+            ViewBag.SearchString = search;
+
+            //AFISARE PAGINATA
+            // Alegem sa afisam 6 produse pe pagina
+            int _perPage = 6;
+
+            // Fiind un numar variabil de articole, verificam de fiecare data utilizand 
+            // metoda Count()
+
+            int totalItems = products.Count();
+
+
+            // Se preia pagina curenta din View-ul asociat
+            // Numarul paginii este valoarea parametrului page din ruta
+            // /Products/Index?page=valoare
+
+            var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
+
+            // Pentru prima pagina offsetul o sa fie zero
+            // Pentru pagina 2 o sa fie 3 
+            // Asadar offsetul este egal cu numarul de articole care au fost deja afisate pe paginile anterioare
+            var offset = 0;
+
+            // Se calculeaza offsetul in functie de numarul paginii la care suntem
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * _perPage;
+            }
+
+            // Se preiau articolele corespunzatoare pentru fiecare pagina la care ne aflam 
+            // in functie de offset
+            var paginatedProducts = products.Skip(offset).Take(_perPage);
+
+
+            // Preluam numarul ultimei pagini
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)_perPage);
+
+            // Trimitem articolele cu ajutorul unui ViewBag catre View-ul corespunzator
+            ViewBag.Products = paginatedProducts;
+
+            if (search != "")
+            {
+                ViewBag.PaginationBaseUrl = "/Products/Index/?search=" + search + "&page";
+            }
+            else
+            {
+                ViewBag.PaginationBaseUrl = "/Products/Index/?page";
+            }
+
             return View();
         }
 
@@ -88,6 +182,7 @@ namespace vinTEAge.Controllers
         {
             product.Reviews = null;
             product.UserId = _userManager.GetUserId(User);
+            var sanitizer = new HtmlSanitizer();
 
             if (ProductImage.Length > 0)
             {
@@ -110,6 +205,8 @@ namespace vinTEAge.Controllers
 
             if (ModelState.IsValid)
             {
+                product.Description = sanitizer.Sanitize(product.Description);
+
                 db.Products.Add(product);
                 db.SaveChanges();
                 TempData["message"] = "Produsul a fost adaugat";
@@ -151,6 +248,7 @@ namespace vinTEAge.Controllers
         {
             Product product = db.Products.Find(id);
             requestProduct.Categ = GetAllCategories();
+            var sanitizer = new HtmlSanitizer();
 
             if (ProductImage != null)
             {
@@ -177,6 +275,8 @@ namespace vinTEAge.Controllers
             {
                 if (product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
                 {
+                    requestProduct.Description = sanitizer.Sanitize(requestProduct.Description);
+
                     product.Title = requestProduct.Title;
                     product.Description = requestProduct.Description;
                     product.Photo = requestProduct.Photo;

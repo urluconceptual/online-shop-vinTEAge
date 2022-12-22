@@ -54,7 +54,7 @@ namespace vinTEAge.Controllers
         {
             db.InCarts.Add(cart);
             db.SaveChanges();
-            TempData["message"] = "Colectia a fost adaugata";
+            TempData["messageCart"] = "Produsul a fost adaugat in cos!";
             return Redirect("/Products/Show/" + cart.ProductId);
         }
 
@@ -65,6 +65,7 @@ namespace vinTEAge.Controllers
             var cart = db.InCarts.Where(a => a.Id == aux.Id && a.ProductId == aux.ProductId && a.UserId == aux.UserId).First();
             db.InCarts.Remove(cart);
             db.SaveChanges();
+            TempData["message"] = "Produsul a fost scos in cos";
             return RedirectToAction("Show");
         }
     }

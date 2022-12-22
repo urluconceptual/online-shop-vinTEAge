@@ -16,7 +16,7 @@
 
     @Html.Label("Description", "Descriere produs")
     <br />
-    @Html.TextArea("Description", null, new { @class = "form-control" })
+    @Html.TextArea("Description", null, new { @class = "summernote" })
     <br /><br />
     @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
     <br /><br />

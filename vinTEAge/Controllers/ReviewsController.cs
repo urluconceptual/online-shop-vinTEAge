@@ -42,6 +42,18 @@ namespace vinTEAge.Controllers
         {
             if (ModelState.IsValid)
             {
+                var product = db.Products.Find(review.ProductId);
+                int nrReviews = db.Reviews.Where(p => p.ProductId == review.ProductId).Count();
+
+                if (nrReviews != 0)
+                {
+                    product.Rating = ((int)(((product.Rating * nrReviews) + review.Rating) / (nrReviews + 1) * 10))/(float)10;
+                }
+                else
+                {
+                    product.Rating = review.Rating;
+                }
+
                 review.Date = DateTime.Now;
                 review.UserId = _userManager.GetUserId(User);
                 db.Reviews.Add(review); 
@@ -73,8 +85,6 @@ namespace vinTEAge.Controllers
                 return Redirect("/Products/Show/" + review.ProductId);
             }
 
-
-
         }
 
         //adaugarea review-ului in baza de date:
@@ -88,6 +98,11 @@ namespace vinTEAge.Controllers
             {
                 if (review.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
                 {
+                    var product = db.Products.Find(review.ProductId);
+                    int nrReviews = db.Reviews.Where(p => p.ProductId == review.ProductId).Count();
+
+                    product.Rating = ((product.Rating * nrReviews) + review.Rating) / (nrReviews + 1);
+
                     review.Text = requestReview.Text;
                     review.Rating = requestReview.Rating;
                     review.Date = DateTime.Now;

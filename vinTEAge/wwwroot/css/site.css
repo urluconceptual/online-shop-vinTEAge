@@ -36,6 +36,15 @@ body {
   margin-bottom: 60px;
 }
 
+.footer-position {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 3px 12px #636e72;
+}
+
+
 .navbar {
     background-color: #e5b3ac !important;
     border: none !important;
@@ -61,3 +70,7 @@ a.nav-link {
     .logoutbtn:hover {
         color: #eed5d1 !important;
     }
+
+.note-editor .dropdown-toggle::after {
+    display: none;
+}

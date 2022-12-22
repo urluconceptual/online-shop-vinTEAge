@@ -18,7 +18,7 @@
 
     @Html.Label("Description", "Descriere produs")
     <br />
-    @Html.Editor("Description", new { htmlAttributes = new { @class = "form-control" }, value = Model.Description })
+    @Html.TextArea("Description", Model.Description, new { @class = "form-control summernote", value = Html.Raw(Model.Description) })
     <br />
     <br />
     @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
