@@ -17,6 +17,10 @@
     color: #756f73;
 }
 
+.banner-color {
+    background-color: #756f73 !important;
+}
+
 html {
     font-size: 14px;
 }

@@ -2,42 +2,35 @@
     ViewData["Title"] = "Pagina principala";
 }
 
-<div class="row">
-    <div class="col-12">
-        <div class="bg-light rounded-3 p-5 mb-4">
-            <div class="row">
-                <div class="col-md-8">
-                    <h1 class="font-roboto display-5 fw-bold">@Html.Raw(ViewBag.FirstProduct.Title)</h1>
-                    <div class="font-montserrat mb-3 truncate">@Html.Raw(ViewBag.FirstProduct.Description)</div>
-                    <a href="/Product/Show/@ViewBag.FirstProduct.ProductId" class="btn btn-outline-secondary">Vezi produsul</a>
+<header class="banner-color rounded py-5">
+<div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+        <h1 class="display-4 fw-bolder">vinTEAge</h1>
+        <p class="lead fw-normal text-white-50 mb-0">- ceai ca la carte -</p>
+    </div>
+</div>
+</header>
+<br />
+<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+    @foreach (var product in ViewBag.Products) {
+    <div class="col mb-5">
+        <div class="card h-100">
+            <img class="card-img-top" src="@product.Photo" alt="..." />
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <h5 class="fw-bolder">@product.Title</h5>
+                     <div class="d-flex justify-content-center small mb-2">
+                        <i class="bi bi-star-half"></i> @product.Rating/5
+                     </div>
+                        <i class="bi bi-tag"></i> @product.Price
                 </div>
-                <div class="col-md-4">
-                    <img src="https://icon-library.com/images/newspaper-png-icon/newspaper-png-icon-15.jpg" class="img-fluid align-items-center justify-content-center" />
-                </div>
+            </div>
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                    <div class="text-center"><a class="btn btn-outline-secondary mt-auto" href="/Products/Show/@product.ProductId">Vizualizare produs</a></div>
             </div>
         </div>
     </div>
-</div>
-
-
-
-
-<div class="row mb-4">
-    @foreach (var product in ViewBag.Products)
-    {
-        <div class="col-6 row-style">
-            <div class="card">
-                <div class="card-title p-3 text-center bg-dark text-white">
-                    <h4>@Html.Raw(product.Title)</h4>
-                </div>
-
-                <div class="card-body">
-                    <div class="font-montserrat truncate">@Html.Raw(product.Description)</div>
-                </div>
-                <div class="card-footer">
-                    <a class="btn btn-outline-success" href="/Products/Show/@product.ProductId">Vezi produsul</a>
-                </div>
-            </div>
-        </div>
     }
 </div>
+
+<div class="text-center">Pentru a vizualiza mai multe produse, va rugam sa va inregistrati!</div>

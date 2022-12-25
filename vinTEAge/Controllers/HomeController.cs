@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using vinTEAge.Data;
 using vinTEAge.Models;
@@ -42,11 +43,7 @@ namespace vinTEAge.Controllers
                 return RedirectToAction("Index", "Products");
             }
 
-            var products = from product in db.Products
-                           select product;
-
-            ViewBag.FirstProduct = products.First();
-            ViewBag.products = products.OrderBy(o => o.Rating).Skip(1).Take(2);
+            ViewBag.Products = db.Products.OrderBy(o => o.Rating).Take(4);
 
             return View();
         }
