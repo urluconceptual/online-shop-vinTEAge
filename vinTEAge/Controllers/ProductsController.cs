@@ -39,7 +39,29 @@ namespace vinTEAge.Controllers
         {
             var products = db.Products.Include("Category");
 
+            bool sortedAsc = false;
+            bool sortedDesc = false;
+
+            //sortare
+
+            if (Convert.ToString(HttpContext.Request.Query["sort"]) != null)
+            {
+                string order = Convert.ToString(HttpContext.Request.Query["sort"]);
+                if (order == "crescator")
+                {
+                    sortedAsc = true;
+                    products = products.OrderBy(prod => prod.Price).ThenBy(prod => prod.Rating);
+                }
+                else
+                {
+                    sortedDesc = true;
+                    products = products.OrderByDescending(prod => prod.Price).ThenBy(prod => prod.Rating);
+                }
+            }
+
             ViewBag.Products = products;
+            ViewBag.Asc = sortedAsc;
+            ViewBag.Desc = sortedDesc;
 
             if (TempData.ContainsKey("message"))
             {
