@@ -5,132 +5,183 @@
     <h2 class="alert-secondary p-3 rounded-3 text-center mb-5">@ViewBag.MessageCart</h2>
 }
 
-@*Afisare detalii produs*@
-<div class="card">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <img src="@Model.Photo" class="card-img-top" alt="@Model.Title">
-        </li>
-        <li class="list-group-item">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <h3 class="card-title p-2">@Model.Title</h3>
-                <div class="card-text p-2"><i class="bi bi-tag"></i> @Model.Price lei</div>
-            </div>
-        </li>
-        <li class="list-group-item">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-            <h5 class="card-subtitle mb-2 text-muted">@Model.Category.CategoryName</h5>
-            <div class="card-text p-2"><i class="bi bi-person"></i> @Model.User.UserName</div>
-            </div>
-        </li>
+@if (Model.Approved)
+{
+    @*Afisare detalii produs*@
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <img src="@Model.Photo" class="card-img-top" alt="@Model.Title">
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <h3 class="card-title p-2">@Model.Title</h3>
+                    <div class="card-text p-2"><i class="bi bi-tag"></i> @Model.Price lei</div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <h5 class="card-subtitle mb-2 text-muted">@Model.Category.CategoryName</h5>
+                    <div class="card-text p-2"><i class="bi bi-person"></i> @Model.User.UserName</div>
+                </div>
+            </li>
 
-        <li class="list-group-item">
-            <div class="card-text"><i class="bi bi-star-half"></i> @Model.Rating/5</div>
-        </li>
+            <li class="list-group-item">
+                <div class="card-text"><i class="bi bi-star-half"></i> @Model.Rating/5</div>
+            </li>
 
-        <li class="list-group-item">
-            <div class="card-text">@Html.Raw(Model.Description)</div>
-        </li>
-        @try
-        {
-            @if (ViewBag.AfisareButoane == true && Model.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+            <li class="list-group-item">
+                <div class="card-text">@Html.Raw(Model.Description)</div>
+            </li>
+            @try
             {
-                <li class="list-group-item">
-                    <div class="d-flex flex-row align-content-center justify-content-start">
-                        <a class="btn btn-outline-secondary" href="/Products/Edit/@Model.ProductId">Editeaza produs</a>
-                        <form method="post" action="/Products/Delete/@Model.ProductId">
-                            <button class="btn btn-outline-secondary" type="submit">Sterge produs</button>
-                        </form>
-                    </div>
-                </li>
+                @if (ViewBag.AfisareButoane == true && Model.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                {
+                    <li class="list-group-item">
+                        <div class="d-flex flex-row align-content-center justify-content-start">
+                            <a class="btn btn-outline-secondary" href="/Products/Edit/@Model.ProductId">Editeaza produs</a>
+                            <form method="post" action="/Products/Delete/@Model.ProductId">
+                                <button class="btn btn-outline-secondary" type="submit">Sterge produs</button>
+                            </form>
+                        </div>
+                    </li>
+                }
             }
-        }
-        catch { }
-        <li class="list-group-item">
-            <div class="d-flex flex-row align-content-center justify-content-end">
-                @if (ViewBag.EsteUser)
-                {
-                    <form method="post" action="/InCarts/New">
-                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
-                        <input type="hidden" name="UserId" value="@ViewBag.UserCurent" />
-                        <input type="hidden" name="Date" value="@DateTime.Now" />
-                        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-bag-plus"></i> Adauga in cos</button>
-                    </form>
-                    <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId"><i class="bi bi-vector-pen"></i> Adauga review</a>
-                }
-                @if (!ViewBag.EsteUser && !ViewBag.EsteAdmin && !ViewBag.EsteEditor) {
-                    <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-bag-plus"></i> Adauga in cos </a>
-                    <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-vector-pen"></i> Adauga review </a>
-                }
-            </div>
-        </li>
-    </ul>
-</div>
-
-
-</br>
-</br>
-
-
-@if (ViewBag.Message != null)
-{
-    <h2 class="alert-secondary p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
-}
-
-@*Afisare review-uri produs*@
-
-@{
-    bool noReviews = true;
-}
-@foreach (var review in Model.Reviews)
-{
-    noReviews = false;
-    <div class="card text-center">
-        <div class="card-header">Utilizator @review.User.UserName</div>
-
-        <div class="card-body">
-            <h5><i class="bi bi-star-half"></i> @review.Rating/5</h5>
-            <p class="card-text">@review.Text</p>
-        </div>
-
-        <div class="card-footer text-muted">
-            <div class="d-flex d-flex justify-content-between align-items-center">
-
-
-                @if(review.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
-                {
-                    <div>
-                        <a class="btn btn-outline-secondary" href="/Reviews/Edit/@review.ReviewId"><i class="bi bi-pencil-square"></i>Editeaza</a>
-                    </div>
-
-                    <div>@review.Date</div>
-
-                    <div>
-                        <form method="post" action="/Reviews/Delete/@review.ReviewId">
-                            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+            catch { }
+            <li class="list-group-item">
+                <div class="d-flex flex-row align-content-center justify-content-end">
+                    @if (ViewBag.EsteUser)
+                    {
+                        <form method="post" action="/InCarts/New">
+                            <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                            <input type="hidden" name="UserId" value="@ViewBag.UserCurent" />
+                            <input type="hidden" name="Date" value="@DateTime.Now" />
+                            <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-bag-plus"></i> Adauga in cos</button>
                         </form>
-                    </div>
-                }
-                else
-                {
-                    <div>@review.Date</div>
-                }
-                
+                        <a class="btn btn-outline-secondary" href="/Reviews/New/@Model.ProductId"><i class="bi bi-vector-pen"></i> Adauga review</a>
+                    }
+                    @if (!ViewBag.EsteUser && !ViewBag.EsteAdmin && !ViewBag.EsteEditor)
+                    {
+                        <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-bag-plus"></i> Adauga in cos </a>
+                        <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Register"><i class="bi bi-vector-pen"></i> Adauga review </a>
+                    }
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+    <br>
+    <br>
+
+
+    @if (ViewBag.Message != null)
+    {
+        <h2 class="alert-secondary p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
+    }
+
+    @*Afisare review-uri produs*@
+
+
+    bool noReviews = true;
+
+    @foreach (var review in Model.Reviews)
+    {
+        noReviews = false;
+        <div class="card text-center">
+            <div class="card-header">Utilizator @review.User.UserName</div>
+
+            <div class="card-body">
+                <h5><i class="bi bi-star-half"></i> @review.Rating/5</h5>
+                <p class="card-text">@review.Text</p>
+            </div>
+
+            <div class="card-footer text-muted">
+                <div class="d-flex d-flex justify-content-between align-items-center">
+
+
+                    @if (review.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+                    {
+                        <div>
+                            <a class="btn btn-outline-secondary" href="/Reviews/Edit/@review.ReviewId"><i class="bi bi-pencil-square"></i>Editeaza</a>
+                        </div>
+
+                        <div>@review.Date</div>
+
+                        <div>
+                            <form method="post" action="/Reviews/Delete/@review.ReviewId">
+                                <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>@review.Date</div>
+                    }
+
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
 
-@*Daca nu exista review-uri*@
+    @*Daca nu exista review-uri*@
 
-@if (noReviews)
-{
-    <div class="card text-center">
-        <div class="card-header"></div>
-        <div class="card-body">
-            Acest produs nu are review-uri.
+    @if (noReviews)
+    {
+        <div class="card text-center">
+            <div class="card-header"></div>
+            <div class="card-body">
+                Acest produs nu are review-uri.
+            </div>
+            <div class="card-footer text-muted"></div>
         </div>
-        <div class="card-footer text-muted"></div>
-    </div>
+    }
 }
+else
+    @if (User.IsInRole("Admin"))
+{
+    @*Afisare detalii produs*@
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <img src="@Model.Photo" class="card-img-top" alt="@Model.Title">
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <h3 class="card-title p-2">@Model.Title</h3>
+                    <div class="card-text p-2"><i class="bi bi-tag"></i> @Model.Price lei</div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <h5 class="card-subtitle mb-2 text-muted">@Model.Category.CategoryName</h5>
+                    <div class="card-text p-2"><i class="bi bi-person"></i> @Model.User.UserName</div>
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <div class="card-text"><i class="bi bi-star-half"></i> @Model.Rating/5</div>
+            </li>
+
+            <li class="list-group-item">
+                <div class="card-text">@Html.Raw(Model.Description)</div>
+            </li>
+
+            <li class="list-group-item">
+                <div class="d-flex flex-row align-content-center justify-content-start">
+                    <form method="post" action="/Products/Approve/@Model.ProductId">
+                        <button class="btn btn-outline-secondary" type="submit">Aproba cererea</button>
+                    </form>
+               
+                    <form method="post" action="/Products/Delete/@Model.ProductId">
+                        <button class="btn btn-outline-secondary" type="submit">Respinge cererea</button>
+                    </form>
+                </div>
+            </li>
+            
+        </ul>
+    </div>
+
+}
+

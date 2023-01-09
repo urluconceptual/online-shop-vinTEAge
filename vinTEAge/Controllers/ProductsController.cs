@@ -206,6 +206,11 @@ namespace vinTEAge.Controllers
             product.UserId = _userManager.GetUserId(User);
             var sanitizer = new HtmlSanitizer();
 
+            if (User.IsInRole("Admin"))
+                product.Approved = true;
+            else
+                product.Approved = false; 
+
             if (ProductImage.Length > 0)
             {
                 // Generam calea de stocare a fisierului
@@ -322,6 +327,19 @@ namespace vinTEAge.Controllers
             }
         }
 
+        //aprobarea cererii de adaugare a unui nou produs
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult Approve(int id)
+        {
+            Product product = db.Products.Find(id);
+            product.Approved = true;
+            db.SaveChanges();
+            TempData["message"] = "Cererea a fost aprobata!";
+            return RedirectToAction("Index"); 
+
+        }
+
         // se sterge un produs din baza de date 
         [Authorize(Roles = "Editor,Admin")]
         [HttpPost]
@@ -333,7 +351,10 @@ namespace vinTEAge.Controllers
             {
                 db.Products.Remove(product);
                 db.SaveChanges();
-                TempData["message"] = "Produsul a fost sters!";
+                if(User.IsInRole("Admin") && !product.Approved)
+                    TempData["message"] = "Cererea a fost respinsa!";
+                else
+                    TempData["message"] = "Produsul a fost sters!";
                 return RedirectToAction("Index");
             }
             else

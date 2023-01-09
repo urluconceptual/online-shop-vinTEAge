@@ -12,25 +12,30 @@
 </header>
 <br />
 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-    @foreach (var product in ViewBag.Products) {
-    <div class="col mb-5">
-        <div class="card h-100">
-            <img class="card-img-top" src="@product.Photo" alt="..." />
-            <div class="card-body p-4">
-                <div class="text-center">
-                    <h5 class="fw-bolder">@product.Title</h5>
-                     <div class="d-flex justify-content-center small mb-2">
-                        <i class="bi bi-star-half"></i> @product.Rating/5
-                     </div>
-                        <i class="bi bi-tag"></i> @product.Price
+    @foreach (var product in ViewBag.Products) 
+    {
+        @if(product.Approved)
+        {
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <img class="card-img-top" src="@product.Photo" alt="..." />
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">@product.Title</h5>
+                            <div class="d-flex justify-content-center small mb-2">
+                                <i class="bi bi-star-half"></i> @product.Rating/5
+                            </div>
+                            <i class="bi bi-tag"></i> @product.Price
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-secondary mt-auto" href="/Products/Show/@product.ProductId">Vizualizare produs</a></div>
+                    </div>
                 </div>
             </div>
-            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center"><a class="btn btn-outline-secondary mt-auto" href="/Products/Show/@product.ProductId">Vizualizare produs</a></div>
-            </div>
-        </div>
-    </div>
+        }
     }
+
 </div>
 
 <div class="text-center">Pentru a vizualiza mai multe produse, va rugam sa va inregistrati!</div>

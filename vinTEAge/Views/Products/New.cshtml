@@ -42,5 +42,13 @@
     @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
     <br /><br />
 
-    <button class="btn btn-outline-secondary" type="submit">Adauga produs</button>
+   @if(User.IsInRole("Editor"))
+   {
+        <button class="btn btn-outline-secondary" type="submit">Trimite cerere de adaugare</button>
+   }
+
+   @if(User.IsInRole("Admin"))
+   {
+        <button class="btn btn-outline-secondary" type="submit">Adauga produs</button>
+   }
 }
