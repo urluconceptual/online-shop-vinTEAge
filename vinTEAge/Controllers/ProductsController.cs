@@ -44,18 +44,38 @@ namespace vinTEAge.Controllers
 
             //sortare
 
-            if (Convert.ToString(HttpContext.Request.Query["sort"]) != null)
+           if(User.IsInRole("Admin"))
             {
-                string order = Convert.ToString(HttpContext.Request.Query["sort"]);
-                if (order == "crescator")
+                if (Convert.ToString(HttpContext.Request.Query["sort"]) != null)
                 {
-                    sortedAsc = true;
-                    products = products.OrderBy(prod => prod.Price).ThenBy(prod => prod.Rating);
+                    string order = Convert.ToString(HttpContext.Request.Query["sort"]);
+                    if (order == "crescator")
+                    {
+                        sortedAsc = true;
+                        products = products.OrderBy(prod => prod.Approved);
+                    }
+                    else
+                    {
+                        sortedDesc = true;
+                        products = products.OrderByDescending(prod => prod.Approved);
+                    }
                 }
-                else
+            }
+           else
+            {
+                if (Convert.ToString(HttpContext.Request.Query["sort"]) != null)
                 {
-                    sortedDesc = true;
-                    products = products.OrderByDescending(prod => prod.Price).ThenBy(prod => prod.Rating);
+                    string order = Convert.ToString(HttpContext.Request.Query["sort"]);
+                    if (order == "crescator")
+                    {
+                        sortedAsc = true;
+                        products = products.OrderBy(prod => prod.Price).ThenBy(prod => prod.Rating);
+                    }
+                    else
+                    {
+                        sortedDesc = true;
+                        products = products.OrderByDescending(prod => prod.Price).ThenBy(prod => prod.Rating);
+                    }
                 }
             }
 
