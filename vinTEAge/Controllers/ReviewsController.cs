@@ -16,7 +16,7 @@ namespace vinTEAge.Controllers
         public ReviewsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
-            db = context; 
+            db = context;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -77,8 +77,8 @@ namespace vinTEAge.Controllers
 
             if (review.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
-                return View(review);
-            }
+            return View(review); 
+        }
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa modificati comentariul!";
@@ -103,14 +103,14 @@ namespace vinTEAge.Controllers
 
                     product.Rating = ((product.Rating * nrReviews) + review.Rating) / (nrReviews + 1);
 
-                    review.Text = requestReview.Text;
-                    review.Rating = requestReview.Rating;
-                    review.Date = DateTime.Now;
-                    TempData["message"] = "Review-ul a fost modificat!";
-                    db.SaveChanges();
+                review.Text = requestReview.Text;
+                review.Rating = requestReview.Rating;
+                review.Date = DateTime.Now;
+                TempData["message"] = "Review-ul a fost modificat!";
+                db.SaveChanges();
 
-                    return Redirect("/Products/Show/" + review.ProductId);
-                }
+                return Redirect("/Products/Show/" + review.ProductId);
+            }
                 else
                 {
                     TempData["message"] = "Nu aveti dreptul sa modificati comentariul!";
@@ -136,10 +136,10 @@ namespace vinTEAge.Controllers
 
             if (review.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
-                db.Reviews.Remove(review);
-                db.SaveChanges();
-                return Redirect("/Products/Show/" + review.ProductId);
-            }
+            db.Reviews.Remove(review);
+            db.SaveChanges();
+            return Redirect("/Products/Show/" + review.ProductId);
+        }
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa stergeti comentariul!";
