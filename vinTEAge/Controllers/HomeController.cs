@@ -43,7 +43,7 @@ namespace vinTEAge.Controllers
                 return RedirectToAction("Index", "Products");
             }
 
-            ViewBag.Products = db.Products.OrderBy(o => o.Rating).Take(4);
+            ViewBag.Products = db.Products.OrderByDescending(o => o.Rating).Take(4);
 
             return View();
         }

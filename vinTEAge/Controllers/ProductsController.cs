@@ -256,7 +256,10 @@ namespace vinTEAge.Controllers
 
                 db.Products.Add(product);
                 db.SaveChanges();
-                TempData["message"] = "Produsul a fost adaugat";
+                if (User.IsInRole("Admin"))
+                    TempData["message"] = "Produsul a fost adaugat.";
+                else
+                    TempData["message"] = "Cererea de adaugare a fost trimisa.";
                 return RedirectToAction("Index");
             }
             else
