@@ -27,3 +27,33 @@ Group project created in ASP.NET for Web Application Development course. Develop
     * The products are part of dynamically created categories, and they require a name, a short description that can be 
     formatted within the Summernote text editor, a picture, price. Their rating and review section will be updated
     every time a review is posted.
+
+## Screenshots
+
+#### To do! Finish adding screenshots.
+
+This section contains demo photos of the web application, with the features for each type of user.
+
+### Unregistered user
+
+-> Homepage:
+
+![ss1](photos/ss1.png)
+
+-> Create account page:
+
+![ss2](photos/ss2.png)
+
+### Registered user:
+
+-> Homepage:
+
+![ss3](photos/ss3.png)
+
+-> After sorting by descending price:
+
+![ss4](photos/ss4.png)
+
+-> Afer searching by keyword:
+
+![ss5](photos/ss5.png)
